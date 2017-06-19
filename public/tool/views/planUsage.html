@@ -1,0 +1,115 @@
+<!--<div ng-show="authData" id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>-->
+<rd-loading></rd-loading>
+
+<div class="col-xs-12 col-sm-8 col-sm-offset-2 text-center " uib-collapse="!phd_error">
+    <div class="phd-card">
+        <p class="phd-callout callout-danger">
+            <span ng-bind-html="phd_errorMsg | sanitize"></span>
+        </p>
+    </div>
+</div>
+<div class="row" ng-show="!phd_error">
+    <div class="  plan-card">
+        <div class="col-xs-12" ng-hide="true">
+            <div class="phd-card card-lg">
+                <div class="phd-card-title">
+                    <h4>Account Details</h4>
+                </div>
+                <div class="phd-card-body">
+                    <div class="row">
+
+                        <div class="col-xs-12 accountDetails">
+                            <div class="col-xs-12"><b> Plan Opted</b>{{currentData.packageName}}
+                                <button type="button" class="btn btn-default" ng-click="upgradePlan()"><i class="fa fa-level-up"></i>
+                                    Upgrade Plan</button></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="phd-card card">
+                <div class="card-block row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="phd-card card card--minheight p-a-0">
+                            <div class="card-header text-center p-a-1">
+                                <h5>Subscribers</h5>
+                            </div>
+                            <div class="card-block">
+                                <canvas id="subscriberPie" class="chart chart-pie" chart-data="subscriberData" chart-labels="subscriberLabels" chart-options="subscriberOptions"
+                                    chart-colours="colorsRest">
+                                </canvas>
+                                <div class="indexContainer">
+                                    <p class="consumedIndex">Remaining (%)</p>
+                                    <p class="remainedIndex">Consumed (%)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="phd-card card card--minheight p-a-0">
+                            <div class="card-header text-center p-a-1">
+                                <h5>MUVs</h5>
+                            </div>
+                            <div class="card-block">
+                                <canvas id="mauPie" class="chart chart-pie" chart-data="mauData" chart-labels="mauLabels" chart-options="mauOptions" chart-colours="colorsRest">
+                                </canvas>
+                                <div class="indexContainer">
+                                    <p class="consumedIndex">Remaining (%)</p>
+                                    <p class="remainedIndex">Consumed (%)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <table class="table table-bordered pricing-table">
+                            <tr>
+                                <td><b>Allocated Subscribers</b></td>
+                                <td>{{currentData.planSubscriber | number}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Consumed Subscribers</b></td>
+                                <td>{{currentData.consumedSubscriber | number}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <table class="table table-bordered pricing-table">
+                            <tr>
+                                <td><b>Allocated MUVs</b></td>
+                                <td>{{currentData.planMAU | number}}</td>
+                            </tr>
+                            <tr>
+                                <td><b> Consumed MUVs</b></td>
+                                <td>{{currentData.consumedMAU | number}}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-6" ng-hide="true">
+        <div class="phd-card">
+            <div class="phd-card-title">
+                <h4>REST API</h4>
+            </div>
+            <div class="phd-card-body text-center statisticsContainer">
+                <canvas id="doughnut2" class="chart chart-doughnut" chart-data="dataRest" chart-labels="labelsRest" chart-colours="colorsRest">
+                </canvas>
+                <div class="indexContainer">
+                    <!--<div class="consumedIndex">
+                                </div>-->
+                    <p class="consumedIndex">Plan Consumed</p>
+
+                    <!--<div class="remainedIndex">
+                                </div>-->
+                    <p class="remainedIndex">Plan Remaining</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

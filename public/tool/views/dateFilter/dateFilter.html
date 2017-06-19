@@ -1,0 +1,41 @@
+<div class="" ng-show="!phd_error">
+	<div class="row">
+		<div class="col-xs-12 col-md-6 col-md-offset-4" uib-collapse="!result">
+			<div class="phd-card col-xs-12 col-md-6 col-md-offset 3">
+				<p class="phd-callout callout-danger">{{msg}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="{{containerClass}}" ng-if="showCalander">
+		<div class="phd-card">
+			<form name="getCamp">
+				<div class="form-group col-xs-12 col-md-6">
+					<label>From Date :</label>
+					<div class="input-group">
+						<input type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="fromDate" is-open="toggleCalendarView.showFromdp"
+							max-date="dtmax" required/>
+						<span class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="showFromcalendar()">
+							<i class="glyphicon glyphicon-calendar  "></i>
+						</button>
+					</span>
+					</div>
+				</div>
+				<div class="form-group col-xs-12 col-md-6">
+					<label>To Date :</label>
+					<div class="input-group">
+						<input type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="toDate" is-open="toggleCalendarView.showTodp"
+							max-date="dtmax" required/>
+						<span class="input-group-btn">
+						<button type="button" class="btn btn-default " ng-click="showTocalendar()">
+							<i class="glyphicon glyphicon-calendar "></i>
+						</button>
+					</span>
+					</div>
+				</div>
+				<div class="phd-btn-container">
+					<button type="button" ng-click="set(fromDate, toDate)" class="btn btn-default" ng-disabled="getCamp.$error.required"><i class="fa fa-table" aria-hidden="true"></i> Show Records</button>
+				</div>
+			</form>
+		</div>
+	</div>

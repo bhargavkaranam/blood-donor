@@ -1,0 +1,53 @@
+<div ui-view="headbar"></div>
+ <rd-loading></rd-loading>  
+ <div id="login">
+<div class="container"> 
+   <div class="row phd-flex center column full ">
+    <div class="col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 rd-form">
+      <div class="text-center">
+      <h4>Welcome To Widely </h4>
+      </div>
+      <div class="p-x-3 p-t-3">
+       <form role="form" name="invitedUserLoginForm">
+                   <div class="form-group">
+                      <!--<label for="name">Name <span class="text-danger">* </span></label>-->
+                      <input type="text" ng-model="invited.name" class="form-control" id="name"  required = "required" placeholder="Name">
+                  </div>
+                  <div class="form-group">
+                      <!--<label for="email">Email address <span class="text-danger">* </span></label>-->
+                      <input type="email" ng-model ="invited.email" class="form-control" id="email" ng-model="login.email" required = "required" placeholder="Email">
+                  </div>
+                   <div class="form-group">
+                      <!--<label for="psw">Password <span class="text-danger">* </span></label>-->
+                      <input type="password" ng-model="invited.password" class="form-control" id="psw" name="pwd" required = "required" placeholder="Password" pattern="^(?=.*[^a-zA-Z])(?=.*[0-9])\S{6,15}$">
+                      <span ng-show="invitedUserLoginForm.pwd.$touched && invitedUserLoginForm.pwd.$error.pattern">{{passwordErrMsg}}</span>
+                  </div>
+                  <!--<div class="checkbox">
+                     <label><input type="checkbox" ng-model="login.remember"> Remember me</label>
+                   <div class="rd-float-right"><a href="#">Forgot Password ?</a></div>             
+                  </div>-->
+                  <div class="checkbox form-group">
+                    <label>
+                        <input type="checkbox" required = "required" id="termCondition" ng-model="term" >By signing up you agree to our<a href="/terms-of-use" target="_blank"> Terms</a> and<a href="/privacy-policy" target="_blank"> Privacy Policy</a>
+                        </label>
+                </div>
+                 
+                  <div ng-messages="msg" uib-collapse=!showMsg class="col-xs-12 text-center">
+                        <p ng-message="success" class="phd-callout callout-success"><span ng-bind-html="infoSuccess | sanitize"></span></p>
+                        <p  ng-message="failure" class="phd-callout callout-danger" ><span ng-bind-html="infoErr | sanitize"></span></p>
+                        <p  ng-message="emailExist" class="phd-callout callout-danger" ><span ng-bind-html="emailExist | sanitize"></span>contact to our team </p>
+                  </div>
+                   
+      </form>
+      </div>
+      </div>
+       <div class="col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 rd-form card-footer">
+       <div class="phd-btn-container">
+                  <button type="submit" class="btn  btn--brandBlue" ng-disabled="invitedUserLoginForm.$invalid" ng-click="onSubmit()" style="float:right"><i class="fa fa-sign-in white" aria-hidden="true"></i> Submit</button>
+                  </div>
+       </div>
+      </div>
+  </div>  
+ 
+</div>
+ </div>

@@ -1,0 +1,98 @@
+<!--<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container-fluid">
+    <div class="navbar-header rd-color ">
+        
+      <a class="navbar-brand rd-dispaly " href="#">
+          <span class="rd-title">ProgressHive<span>
+        <img alt="Ninja" src="assets/img/logo.svg" class="logo-ninja"></a>
+    </div> -->
+<!--<ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">Page 1</a></li>
+      <li><a href="#">Page 2</a></li> 
+      <li><a href="#">Page 3</a></li> 
+    </ul>
+  <!--  <ul class="nav navbar-nav navbar-right">
+    </ul>-->
+<!-- <ul class="nav navbar-nav navbar-right">
+      <li><a href="#/register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+      <li><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </ul>
+  </div>
+</nav>-->
+<rd-loading></rd-loading>
+<div ui-view="headbar"></div>
+<div id="login">
+	<div class="container">
+		<div class="row phd-flex center column full ">
+			<div uib-collapse=!showMsg class="col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 rd-form">
+				<div class="text-center">
+					<h4 id="loginText" >Welcome To Widely </h4>
+				</div>
+				<div ng-messages="msg" class="text-center">
+					<p ng-message="success" class="phd-callout callout-success">
+						<span ng-bind-html="infoSuccess | sanitize"></span>
+					</p>
+					<p ng-message="failure" class="phd-callout callout-danger">
+						<span ng-bind-html="activationFailure | sanitize"></span>
+					</p>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 rd-form --no-b-b-r m-t-1 p-t-2 ">
+				<div class="p-x-3 p-t-3">
+					<form role="form" name="loginForm" class="form" class="p-x-2">
+						<div class="form-group">
+							<div class="form-header m-b-3">
+								<h4>Login</h4>
+								<!--<p class="sub">Completely free. No credit card required.</p>-->
+							</div>
+							<!--<label for="email"><span class="text-danger">* </span></label>-->
+						</div>
+						<div class="form-group">
+							<div class="customGPlusSignIn customBtn" ng-click=loginWithGoggle()>
+								<span class="icon-google"></span>
+								<span class="buttonText">Google</span>
+							</div>
+							<!--<div class=" customGPlusSignIn customBtn" ng-click=loginWithGitHub()>
+								<span class="icon-github"></span>
+								<span class="buttonText">Github</span>
+							</div>-->
+						</div>
+						<div class="form-group orDiv">
+							<h5 class="orDash"><span>Or</span></h5>
+						</div>
+						<div class="form-group">
+							<input type="email" my-enter="login()" ng-model="user.email" class="form-control" id="email" ph-focus="true" ng-model="login.email"
+								required="required" placeholder="Email" tabindex="1">
+
+						</div>
+						<div class="form-group">
+							<input type="password" my-enter="login()" ng-model="user.pswd" class="form-control" id="pwd" ng-model="login.password" required="required"
+								placeholder="Password " tabindex="2">
+						</div>
+						<div class="checkbox">
+							<label><input type="checkbox"  my-enter="login()" ng-model="remember" tabindex="-1" >Remember me</label>
+						</div>
+						<div class="rd-float-right p-y-1">
+							<a href="" ng-click="forgetPassword()" tabindex="-1">Forgot Password?</a>
+						</div>
+						<div class="col-xs-12 p-a-0 " uib-collapse="!result">
+							<p class="phd-callout callout-danger">{{msg}}</p>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 card-footer">
+				<div class="col-xs-12 phd-btn-container">
+					<button type="submit" class="btn  btn--brandBlue" ng-disabled="loginForm.$invalid" my-enter="login()" ng-click="login()"
+						style="float:right" tabindex="3"><i class="fa fa-sign-in white" aria-hidden="true"></i> Login</button>
+</div>
+</div>
+<div class="col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 m-t-1 p-a-0">
+	<p ng-hide="sellerLogin" class="white sm">Don't have an account? <a href="#/register" tabindex="4"> Sign Up</a></p>
+</div>
+
+</div>
+
+</div>
+</div>

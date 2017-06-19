@@ -1,0 +1,112 @@
+<!--<div uib-collapse="hideWarning">
+    <div class="row red renewSubscriptionMsg" ng-show="severe">
+        <span class="fa fa-exclamation-triangle"></span>
+        <p>Warning! Your subscription is about to expire. Kindly renew it. {{consumptionPercent}}% left. </p>
+    </div>
+
+    <div class="row orange renewSubscriptionMsg" ng-show="critical">
+        <span class="fa fa-bell"></span>
+        <p>Alert! Your subscription will expire in few days. {{consumptionPercent}}% left. </p>
+    </div>
+</div>-->
+
+<div class="row header">
+	<div class="col-xs-12">
+		<div class="meta">
+			<div class="breadcrumb-links ">
+				<span class="m-b-0">{{headerBreadCrumb.breadCrumbHeadText}}</span>
+				<a href="{{headerBreadCrumb.hrefForFirstElement}}" ng-if="headerBreadCrumb.bCrumbForFirstElement">{{headerBreadCrumb.bCrumbForFirstElement}}</a><span ng-if="headerBreadCrumb.bCrumbForSecElement"> / </span>
+				<a href="{{headerBreadCrumb.hrefForSecElement}}" ng-if="headerBreadCrumb.bCrumbForSecElement">{{headerBreadCrumb.bCrumbForSecElement}}</a>
+			</div>
+		</div>
+		<div class="user pull-right">
+			<div class="item dropdown" uib-dropdown>
+				<a href="#" class="dropdown-toggle" uib-dropdown-toggle>
+					<p class="phd-user-name"><span class="fa fa-user"></span><span class="hidden-xs">&nbsp;&nbsp;{{username}} </span><span class="fa fa-caret-down"
+							aria-hidden="true"></span></p>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<!--<li class="divider"></li>-->
+					<li class="link">
+						<a href="#/dashboard/user-settings">
+							<span class="fa fa-cogs"></span>&nbsp;&nbsp;User Settings
+						</a>
+					</li>
+					<li class="divider"></li>
+					<li class="link">
+						<a href="#/dashboard/invite-users">
+							<span class="fa fa-user-plus"></span>&nbsp;&nbsp;Invite Users
+						</a>
+					</li>
+					<li class="divider"></li>
+					<li class="link" ng-if="!reseller">
+						<a href="#/dashboard/plans">
+							<span class="fa fa-money"></span>&nbsp;&nbsp;Plans
+						</a>
+					</li>
+					<li class="divider" ng-if="!reseller"></li>
+					<li class="link" ng-if="!reseller">
+						<a href="#/dashboard/plan-usage">
+							<span class="fa fa-hourglass-half"></span>&nbsp;&nbsp;Plan Usage
+						</a>
+					</li>
+					<li class="divider" ng-if="!reseller"></li>
+					<li class="link">
+						<a href="#" ng-click="logout()">
+							<span class="fa fa-sign-out"></span>&nbsp;&nbsp;Logout
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="item dropdown pn-click-cursor " uib-dropdown>
+				<a href="#" class="dropdown-toggle" uib-dropdown-toggle>
+					<p class="phd-user-name"><span class="menu-icon fa fa-cog"></span><span class="hidden-xs">&nbsp;&nbsp;{{companyName}} </span><span class="fa fa-caret-down"
+							aria-hidden="true"></span></p>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<!--<li class="divider"></li>-->
+					<li class="link">
+						<a href="#/dashboard/plug-and-play">
+							<span class="fa fa-plug"></span>&nbsp;&nbsp;Plug And Play
+						</a>
+					</li>
+					<li class="divider"></li>
+					<li class="link">
+						<a href="#/dashboard/account-information">
+							<span class="fa fa-info"></span>&nbsp;&nbsp;Account Info
+						</a>
+					</li>
+					<li class="divider"></li>
+					<li class="link">
+						<a href="#/dashboard/organization-settings">
+							<span class="fa fa-briefcase"></span>&nbsp;&nbsp;Organization Settings
+						</a>
+					</li>
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Header Bar -->
+<div class="col-xs-12 col-sm-4 p-a-0 " id="pushNotifPreview" uib-collapse="!severe&&!critical&&!showTrail">
+	<div class="phd-card phd-notification">
+		<div class="col-xs-3 p-a-0 notification-container">
+			<div class="notification-img " ng-class="{red:severe,orange:critical,orange:showTrail}">
+				<i class="fa fa-2x white" ng-class="{'fa-exclamation-triangle':severe,'fa-bell':critical, 'fa-bell':showTrail}" aria-hidden="true"></i>
+			</div>
+		</div>
+		<div class="col-xs-9 p-a-0 notification-container">
+			<a href="" ng-click="severe = false;critical = false; showTrail = false"><span class="fa fa-times previewCloseBtn"></span></a>
+			<div class="notification-title">
+				<strong><h4 class="m-a-0" ng-show="severe">Warning!</h4>
+                                                    <h4 class="m-a-0" ng-show="critical">Alert!</h4>
+                                                    </strong>
+			</div>
+			<div class="notification-content">
+				<p ng-show="severe">Your subscription is about to expire, kindly renew it. {{100-consumptionPercent | number}}% left. </p>
+				<p ng-show="critical">Your subscription will expire in few days. {{100-consumptionPercent | number }}% left. </p>
+                <p ng-show="showTrail">{{trailMsg}} {{days}} days </p>
+			</div>
+		</div>
+	</div>
+</div>

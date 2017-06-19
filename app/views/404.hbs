@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{address}}/resource/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="{{address}}/resource/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{address}}/resource/favicon/favicon-16x16.png" sizes="16x16">
+    {{!--<link rel="manifest" href="{{address}}/resource/favicon/manifest.json">--}}
+    <link rel="mask-icon" href="{{address}}/resource/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="{{address}}/resource/favicon/favicon.ico">
+    <meta name="msapplication-config" content="{{address}}/resource/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta name="description" content="Progressive web app tool">
+    
+    <!-- Bootstrap CSS -->
+    <link href="{{#equals env 'development'}}{{address}}/{{css.development}}/main.css{{/equals}}{{#equals env 'testing'}}{{address}}/{{css.testing}}/main.css{{/equals}}{{#equals env 'staging'}}{{address}}/{{css.staging}}/main.min.css{{/equals}}{{#equals env 'production'}}{{address}}/{{css.production}}/main.min.css{{/equals}}" rel="stylesheet" />
+    <!--<link href="{{address}}/resource/octicons/octicons.min.css" rel="stylesheet"/>-->
+    <script src="https://use.fontawesome.com/f1be98b638.js"></script>
+    <title>Widely | This page doesn't exist.</title>
+    
+</head>
+<body>
+        <div class="container-fluid">
+            
+            <nav class="navbar navbar-fixed-top p-a-1 js-nav" style="background-color: #eee;">
+            <div class="container pull-xs-none text-xs-center">
+                <div class="col-xs-12 col-lg-5">
+
+                    <a class="navbar-brand logo {{#if subScrolling }} {{navClass.section}}{{else}}{{navClass.redirect}}{{/if}} hidden-xs-down"
+                        href="/" data-redirect="{{dataRedirect.main}}" data-url="{{dataUrl}}">
+                        <img src="{{address}}/resource/image/logo.png" alt="Widely Progressive Web App Tool" title="Widely Progressive Web App Tool"/>
+                    </a>
+                    {{!--<a class="navbar-brand {{#if subScrolling }} {{navClass.section}}{{else}}{{navClass.redirect}}{{/if}}" href="{{href.main}}"
+                        data-redirect="{{dataRedirect.main}}" data-url="{{dataUrl}}">
+                        <blockquote class="m-b-0  blockquote-reverse p-a-0">
+                            <h3 class="m-b-0"><span>Progress</span>H<span>ive</span></h3>
+                        </blockquote>
+                    </a>--}}
+                    <span class="pull-xs-right">
+                        <a href="#addPopup" class="hidden-sm-up" id="addToHome" style="text-decoration:none;padding: 5px;">
+                            <span class="fa fa-plus-square-o"></span>
+                    </a>
+                    <!--<button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#CollapsingNavbar">-->
+                    <button class="navbar-toggler hidden-lg-up js-sidemenu-show" type="button">
+                           <span class="fa fa-bars"></span>
+                        </button>
+                    </span>
+                </div>
+                {{!--<div class="col-xs-12 col-lg-7 ">
+                    <!--<div class="collapse navbar-toggleable-md col-xs-12" id="CollapsingNavbar">-->
+                    <div class="navbar-toggleable-md col-xs-12 pt-sidemenu-container js-sidemenu-container" id="CollapsingNavbar">
+                        <div class=" pt-sidemenu js-sidemenu">
+                            <header class="navbar hidden-lg-up pt-header">
+                                <button class="pt-navbar-toggler js-sidemenu-hide " href="#"><span class="fa fa-times"></span></button>
+                            </header>
+                            <ul class="nav navbar-nav p-t-1 pull-lg-right " style="display:{{#equals menu 'yes'}}none!important{{/equals}}">
+                                <li class="nav-item p-r-1">
+                                    <a href="/terms-of-use" class="nav-link">Terms of Use</a>
+                                </li>
+                                <li class="nav-item p-r-1">
+                                    <a href="/privacy-policy" class="nav-link">Privacy Policy</a>
+                                </li>
+                            </ul>
+                            <ul class="nav navbar-nav p-t-1 pull-lg-right " style="display:{{#equals menu 'no'}}none!important{{/equals}}">
+                                <li class="nav-item p-r-2">
+                                    <a class="{{#if subScrolling }} {{navClass.section}}{{else}}{{navClass.redirect}}{{/if}} nav-link" href="{{href.what}}" data-redirect="{{dataRedirect.what}}"
+                                        data-url="{{dataUrl}}">Features</a>
+                                </li>
+                                <li class="nav-item p-r-2">
+                                    <a class="{{#if subScrolling }} {{navClass.section}}{{else}}{{navClass.redirect}}{{/if}} nav-link" href="{{href.how}}" data-redirect="{{dataRedirect.how}}"
+                                        data-url="{{dataUrl}}">Product</a>
+                                </li>
+                                <li class="nav-item p-r-2">
+                                    <a href="/faqs" class=" nav-link">FAQs</a>
+                                </li>
+                                <li class="nav-item p-r-2">
+                                    <a class="nav-link" href="/about">About</a>
+                                </li>
+                                <li class="nav-item divider">
+                                    <a class="nav-link p-r-1"></a>
+                                </li>
+                                <li class="nav-item p-r-1">
+                                    <a class="nav-link" href="/pricing">Pricing</a>
+                                </li>
+
+                                <li class="nav-item p-r-1" id="inquire">
+                                    <a class="nav-link btn btn-inquire btn-sm" href="/tool/#/register">Sign Up</a>
+                                </li>
+                                <li class="nav-item p-r-1 nav-item--themeRed">
+                                    <a class="nav-link nav-link--themeRed" href="/tool">Login</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>--}}
+                </div>
+
+            </div>
+        </nav>
+            <section class="p-b-3 min-section m-t-3" >
+                <div class="container">
+                    <div class="row main-content">
+                        <div class="col-xs-12 col-lg-6 col-lg-offset-3" >
+                            <div class="card " >
+                                <div class="card-header text-xs-center">
+                                    <h3 style="font-weight:600!important;">404: Page Not Found</h3>
+                                </div>
+                                
+                                <div class="card-block">
+                                    <!--<h4 class="card-title text-xs-center">
+                                        Lorem Ipsum is simply
+                                    </h4>-->
+                                    <p class="card-text">
+                                      You are trying to access a page which doesn't exist, kindly visit <a href="/">Home Page</a>
+                                     <span class="fa fa-smile-o"></span></p>
+                                </div>
+                                <!--<div class="card-footer text-xs-center">
+                                    <a class="nav-link btn btn-inquire btn-sm btn-cs-lg" data-toggle="modal" data-target="#myModal">GET QUOTE</a>
+                                </div>-->
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+               
+                 {{!--<footer id="footer" class="row min-footer">--}}
+                    <!--<div class="container">
+                        <div class="col-md-2 footerLogo p-b-1 ">
+                             <a class="ph_scroll_tosection" href="#main"><img src="{{address}}/resource/image/logo.svg" /></a>
+                        </div>
+                        <div class="col-md-2 p-b-1 ">
+                            <h5>Widely</h5>
+                            <ul>
+                                <li><a href="#" class="ph_redirect_sections" data-redirect="#main" data-url="references">References</a></li>
+                                <li><a href="#" class="ph_redirect_sections" data-redirect="#pricing" data-url="pricing">Pricing</a></li>
+                                <li><a href="#" class="ph_redirect_sections" data-redirect="#faq" data-url="pricing">F.A.Qs</a></li>
+                               
+                            </ul>
+                        </div>
+                         <div class="col-md-2 p-b-1  ">
+                            <h5>Company</h5>
+                            <ul>
+                                <li><a href="#" class="ph_redirect_sections" data-redirect="#main" data-url="careers">Careers</a></li>
+                                 <li><a href="#" class="ph_redirect_sections" data-redirect="#about" data-url="careers">About Us</a></li>
+                                  <li><a href="#" class="ph_redirect_sections" data-redirect="#main" data-url="inquire">Inquire</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-2 p-b-1  ">
+                            <h5>Contact</h5>
+                            <ul>
+                                <li><a href="https://progresshive.slack.com/messages/progressivewebapp/" target="_blank"><span ><img src="{{address}}/resource/image/slack.svg" style="height: 14px;"></span> Slack</a></li>
+                                <li><a href="mailto:hi@progresshive.io" target="_blank"><span class="ph_red octicon octicon-mail"></span> Email</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-md-3 p-b-1  " >
+                            <h5>Find Us</h5>
+                            <p>402, KM Trade Towers,
+                            Radisson Blu, Kaushambi, Ghaziabad,
+                            Uttar Pradesh - 201010</p>
+                            <a type="button" class="btn btn-inquire " href="https://www.google.co.in/maps/place/Radisson+Blu+Hotel+Ghaziabad/@28.6370357,77.3254913,17z/data=!3m1!4b1!4m5!3m4!1s0x390cfb2b7666fef5:0xa24a557ac91e9ab!8m2!3d28.637031!4d77.32768?hl=en" target="_blank">
+                                View Map
+                                </a>
+                        </div>
+                        
+                    </div>-->
+                {{!--</footer>--}}
+                    <section class="terms row min-terms">
+                    <div class="container">
+                   <div class="text-xs-center m-t-1">
+                            <p>Copyright@2016 <span> Antcrawl Technologies Pvt. Ltd.</span> All rights reserved.</p>
+                        </div>
+                         
+                     </div>
+                     
+                     </div>
+                </section>
+
+    </div>
+    
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.2/js/tether.min.js"></script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script> 
+     <!--<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>-->
+     
+     {{#equals env 'development'}}
+     
+     <script src="/assets/js/app.js"></script>
+   
+     <!--<script src="progresshive.js"></script>-->
+     {{/equals}}
+     
+     {{#equals env 'testing'}}
+   
+     <script src="/assets/js/app.js"></script>
+
+     <!--<script src="progresshive.js"></script>-->
+     {{/equals}}
+
+    {{#equals env 'staging'}}
+        <script src="/js/main.min.js"></script>
+        <!--<script src="/progresshive.min.js"></script>-->
+    {{/equals}}
+
+     {{#equals env 'production'}}
+        <script src="/js/main.min.js"></script>
+        <!--<script src="/progresshive.min.js"></script>-->
+    {{/equals}}
+</body>
+</html>

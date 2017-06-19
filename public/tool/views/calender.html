@@ -1,0 +1,33 @@
+                  <div class="col-xs-12 col-md-7 ">
+                        <div class="phd-card">
+                            <form name="getCamp">
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <label>From Date :</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="fromDate" is-open="showFromdp" max-date="dtmax" ng-focus="showFromcalendar($event)" required/>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="showFromcalendar($event)">
+                                                <i class="glyphicon glyphicon-calendar  "></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-md-6">
+                                    <label>
+                                        To Date :
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="toDate" is-open="showTodp" max-date="dtmax" ng-focus="showTocalendar($event)" required/>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default " ng-click="showTocalendar($event)">
+                                                <i class="glyphicon glyphicon-calendar "></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="phd-btn-container">
+                                    <button type="button" ng-click="getCampRecords(fromDate, toDate)" class="btn btn-default" ng-disabled="getCamp.$error.required"><i class="fa fa-table" aria-hidden="true"></i> Show Records</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>

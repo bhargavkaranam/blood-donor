@@ -1,0 +1,30 @@
+<!--Form 
+ fields : name , email password - all required-->
+
+<div class="container-fluid"> 
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 rd-form">
+            <form role="form" name="loginForm">
+                <div class="form-group">
+                    <label>Name <span class="text-danger">* </span></label>
+                    <input type="text" class="form-control" placeholder="Enter Name" ng-required="true"/>
+                </div>
+                <div class="form-group">
+                    <label>Email <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" placeholder="Enter Email" ng-required="true"/>
+                </div>
+                <div class="form-group">
+                    <label>Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" placeholder="Enter Password" ng-required="true"/>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" placeholder="Re-enter Password" ng-required="true"/>
+                </div>
+                <div class="phd-btn-container">
+                    <button type="submit" class="btn btn-default" ng-click="" style="float:right"><i class="fa fa-sign-in" aria-hidden="true"></i> Register</button>
+                </div>
+            </form>
+        </div>
+    </div>  
+</div>

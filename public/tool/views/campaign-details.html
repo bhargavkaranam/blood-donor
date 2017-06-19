@@ -1,0 +1,158 @@
+<rd-loading>
+</rd-loading>
+
+<div class="col-xs-12 col-sm-8 col-sm-offset-2 text-center " uib-collapse="!phd_error">
+    <div class="phd-card">
+        <p class="phd-callout callout-danger">
+            <span ng-bind-html="phd_errorMsg | sanitize"></span>
+        </p>
+    </div>
+</div>
+
+<div class="" ng-show="!phd_error">
+    <!--<div ng-repeat="temp in selTemplate "> -->
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-md-offset-3" uib-collapse="!result">
+            <div class="phd-card">
+                <p class="phd-callout callout-danger">{{msg}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+
+
+
+            <div class="row">
+                <div class=" col-xs-12 p-a-0 ">
+                    <div style="max-width:500px;margin:0 auto;" class="">
+<div class=" phd-notification phd-card  m-t-0">
+    <div class="col-xs-3 p-a-0 notification-container">
+        <div class="notification-img">
+            <!--<i class="fa fa-paper-plane" aria-hidden="true"></i>-->
+            <img ng-src="{{selTemplate.imageUrl}}" fallback-src="{{'assets/img/notAvailable.png'}}" alt=""/>
+        </div>
+    </div>
+    <div class="col-xs-9 p-a-0 notification-container">
+        <div class="notification-title">
+            <h6 class="m-a-0">{{selTemplate.title}}</h6>
+        </div>
+        <div class="notification-content">
+            <p>{{selTemplate.content}}</p>
+        </div>
+        <div class="notification-link">
+            <a>{{selTemplate.lurl}}</a>
+        </div>
+    </div>
+</div>
+</div>
+
+</div>
+
+<div class="col-xs-12 m-t-0 phd-card">
+    <div class=" text-center">
+        <!--<button ng-click="selTemplate.$remove()" class="btn btn-default"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>-->
+        <div class="phd-media-content">
+            <p>Sent: <i class="fa fa-paper-plane-o" aria-hidden="true"></i>{{selTemplate.sentPushMessages}}</p>
+        </div>
+        <button ng-click="editTemplate(selTemplate)" class="btn btn-default"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit</button>
+        <button ng-click="sendMessage(selTemplate)" class="btn btn-default"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send Message</button>
+    </div>
+</div>
+</div>
+
+</div>
+
+<div class="col-xs-12 col-md-6 ">
+    <div class="row">
+        <div class=" col-xs-12 phd-card phd-notification card-lg p-a-2 m-y-0">
+            <form name="getCamp">
+                <div class="form-group col-xs-12 col-md-6">
+                    <!-- calender -->
+                    <label>From Date :</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="fromDate" is-open="showFromdp" max-date="dtmax"
+                            ng-focus="showFromcalendar($event)" required/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="showFromcalendar($event)">
+                                <i class="glyphicon glyphicon-calendar __icon-modify"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-6">
+                    <label>To Date :</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="toDate" is-open="showTodp" max-date="dtmax"
+                            ng-focus="showTocalendar($event)" required/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="showTocalendar($event)">
+                                <i class="glyphicon glyphicon-calendar __icon-modify"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+            </form>
+            <!-- calender -->
+
+        </div>
+        <div class=" col-xs-12 text-center phd-card">
+            <button type="button" ng-click="getCampRecords(fromDate, toDate)" class="btn btn-default" ng-disabled="getCamp.$error.required"><i class="fa fa-table" aria-hidden="true"></i> Get Records</button>
+        </div>
+    </div>
+</div>
+
+</div>
+<div class="row m-t-3">
+    <div class="col-xs-12 m-b-3">
+        <rd-widget ng-show="showDpResult">
+            <rd-widget-header title="" icon="fa-line-chart" width="2">
+                <!--<a href="#">Manage</a>-->
+            </rd-widget-header>
+            <rd-widget-body classes="no-padding">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th title="Title of the Campaign">Title</th>
+                                <th title="Click Counts">Clicks</th>
+                                <th title="Delivery Counts">Deliveries</th>
+                                <th title="Sent To Total Users">Sent Count</th>
+                                <th title="Group to which message is sent">Segment</th>
+                                <th title="Click Through Rate">CTR</th>
+                                <th title="Duration at which message is sent">Sent Time</th>
+                                <th title="A/B Test conducted">A/B Test</th>
+                            </tr>
+                            <tr ng-hide="pageResult" ng-repeat="obj in  stats | startFrom:(pagination.bigCurrentPage-1)*pagination.itemsPerPage | limitTo:pagination.itemsPerPage">
+                                <td class="capitalize">{{obj.title}}</td>
+                                <td>{{obj.clickDelivery}}</td>
+                                <td>{{obj.trackDelivery}}</td>
+                                <td>{{obj.sentToTotalUsers}}</td>
+                                <td><span ng-repeat="grp in obj.group track by $index" class="capitalize">{{grp.name}} <span ng-if="$index+1!==obj.group.length">,</span></span>
+                                </td>
+                                <td>{{obj.conversionRate | number:2}} %</td>
+                                <td>{{obj.timeStamp | date:'MMM dd (hh:mm a)'}}</td>
+                                <td class="text-center">
+                                    <a href="/tool/#/dashboard/ab-test-details?testId={{obj.testId}}" ng-if="obj.testId">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </a>
+                                    <i class="fa fa-times icon-red" ng-if="!obj.testId" aria-hidden="true"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div uib-collapse="!pageResult" class="text-center">
+                        <p class="phd-callout callout-danger m-t-0">{{msg}}</p>
+                    </div>
+                    <div class="text-center">
+                        <uib-pagination ng-hide="pageResult" total-items="pagination.bigTotalItems" ng-change="pageChanged()" ng-model="pagination.bigCurrentPage"
+                            max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" next-text="&rArr;" previous-text="&lArr;"></uib-pagination>
+                    </div>
+                </div>
+
+            </rd-widget-body>
+        </rd-widget>
+    </div>
+</div>
+</div>

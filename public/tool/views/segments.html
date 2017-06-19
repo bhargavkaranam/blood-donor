@@ -1,0 +1,64 @@
+<!--<div ng-show="authData" id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>-->
+<rd-loading></rd-loading>
+
+
+		<div class="col-xs-12 col-sm-8 col-sm-offset-2 text-center " uib-collapse="!phd_error">
+			<div class="phd-card">
+				<p class="phd-callout callout-danger">
+					<span ng-bind-html="phd_errorMsg | sanitize"></span>
+				</p>
+			</div>
+		</div>
+
+		<div class="row" ng-show="!phd_error">
+			<div class="">
+				<div class=" col-xs-12 col-md-8 col-md-offset-2">
+					<div uib-collapse="!show">
+						<div ng-messages="msg" class="phd-card text-center">
+							<!--bind success msg-->
+							<p ng-message="success" class="phd-callout callout-success ">
+								<span ng-bind-html="successMsg | sanitize"></span>
+
+							</p>
+							<p ng-message="err" class="phd-callout callout-danger">
+								<span ng-bind-html="errMsg | sanitize"></span>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-8 col-md-offset-2">
+
+
+					<div class="phd-card">
+						<div class="phd-card-title m-b-1">
+							<h4>Segments</h4>
+							<p class="phd-card-subheading"></p>
+						</div>
+
+						<form name="segmentForm" class="p-x-3 m-t-3" uib-collapse="noSub">
+							<div class="form-group">
+								<label for="groupName">Group Name <span class="text-danger">* </span></label>
+								<input type="text" class="form-control" id="groupName" ng-model="filter.groupName" placeholder="Group Name" required="required">
+							</div>
+							<div class="form-group">
+								<label for="filter">Choose Filter Type <span class="text-danger">* </span></label>
+								<select name="selectedFilter" class="form-control" ng-change="updateSubType()" ng-model="filter.segment.type" required="required"
+									ng-options="k as k.$id for k in keys">
+                    <!--<option ng-repeat="k in keys" value= "{{keys[k].$id}}">{{keys[k].$id}}</option>-->
+                </select>
+							</div>
+							<div class="form-group" ng-hide="hideSubtype">
+								<label for="filter">Filter Sub Type <span class="text-danger">* </span></label>
+								<select class="form-control" ng-options="item as item.name for item in items track by item.id" ng-model="selected" required="required">
+                </select>
+							</div>
+							<div class="phd-btn-container m-y-3">
+								<button ng-click="createSegment()" class="btn btn-default" ng-disabled="segmentForm.$invalid||noSub"><i class="fa fa-plus" aria-hidden="true"></i>&nbspCreate</button>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	

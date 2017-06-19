@@ -1,0 +1,15 @@
+<div ng-show="authData" id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
+    <rd-loading></rd-loading>
+    <div ui-view="sidebar"></div>
+    <div ui-view="headbar"></div>
+    <div id="content-wrapper">
+        <div class="page-content">
+            <div class="row">
+
+                <div ng-class="classContainer">
+                    <a target="_new" href= "#/sundayRealty/register?org=SM">Add Client</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

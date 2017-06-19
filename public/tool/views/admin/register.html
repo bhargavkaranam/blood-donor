@@ -1,0 +1,70 @@
+<div ui-view="headbar"></div>
+<rd-loading></rd-loading>
+<div id="register">
+	<div class="container">
+		<div class="row phd-flex center column full">
+			<div ng-messages="msg" class=" text-center col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 phd-card m-t-3"
+				uib-collapse=!result>
+				<p ng-message="success" class="phd-callout callout-success">
+					<span ng-bind-html="infoSuccess | sanitize"></span>
+					<br/><br/>
+				</p>
+				<p ng-message="failure" class="phd-callout callout-danger">{{err}}</p>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 rd-form --no-b-b-r m-t-1 p-t-2">
+				<div class="col-xs-12 col-sm-12">
+					<form role="form" name="registerForm" class="p-x-2">
+						<div class="form-header m-b-3">
+							<h4>Sign Up</h4>
+							<p class="sub">Client Registration</p>
+						</div>
+						<div class="form-group m-t-3">
+							<!--<label for="name"><span class="text-danger">* </span></label>-->
+							<input type="text" name="name" ng-model="user.name" class="form-control" id="name" required="required" placeholder="First and Last Name "
+								tabindex="1" ph-focus="true">
+							<span ng-show="registerForm.name.$touched && registerForm.name.$error.required">This field is required</span>
+						</div>
+						<div class="form-group">
+							<!--<label for="email"><span class="text-danger">* </span></label>-->
+							<input type="email" name="email" ng-model="user.email" class="form-control" id="email" required="required" placeholder="Company Email Id "
+								tabindex="2">
+							<span ng-show="registerForm.email.$touched && registerForm.email.$error.required">This field is required</span>
+						</div>
+						<div class="form-group">
+							<input type="password" name="pwd1" ng-model="user.pswd" class="form-control" id="pwd" required="required" placeholder="Password "
+								tabindex="3" pattern="^(?=.*[^a-zA-Z])(?=.*[0-9])\S{6,15}$" />
+							<span ng-show="registerForm.pwd1.$touched && registerForm.pwd1.$error.pattern">{{passwordErrMsg}}</span>
+							<span ng-show="registerForm.pwd1.$touched && registerForm.pwd1.$error.required">This field is required</span>
+						</div>
+						<div class="form-group">
+							<!--<label for="company"> <span class="text-danger">* </span></label>-->
+							<input type="text" ng-model="user.company" name="organization" class="form-control" id="organization" placeholder="Organization"
+								tabindex="4">
+						</div>
+
+						<div class="checkbox form-group ">
+							<label>
+                        <input type="checkbox" required = "required" id="termCondition" ng-model="term" tabindex="-1" >By signing up you agree to our <a href="/terms-of-use" target="_blank" tabindex="-1">Terms</a> &amp; <a href="/privacy-policy" target="_blank" tabindex="-1">Privacy Policy</a>
+                        </label>
+						</div>
+						<div class="recaptcha-container" tabindex="-1">
+							<div vc-recaptcha key="'6Lf46xMUAAAAAEmNTiNIQRTjSw2i2HGmExhL9ApM'" class="m-t-3"></div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 card-footer">
+				<div class="phd-btn-container">
+					<button type="submit" class="btn btn--red" ng-click="register()" style="float:right" ng-disabled="registerForm.$invalid" tabindex="8">
+<i class="fa fa-sign-in white" aria-hidden="true"></i> Sign Up</button>
+</div>
+</div>
+<div class="col-xs-12 col-sm-6 col-md-6  col-lg-4 col-lg-offset-4 col-md-offset-3 col-sm-offset-3 m-t-1 p-a-0">
+	<p class="white sm">
+		Already have an account? <a href="{{registerUrl}}" tabindex="9">Login</a></p>
+</div>
+</div>
+
+</div>
+</div>
+</div>

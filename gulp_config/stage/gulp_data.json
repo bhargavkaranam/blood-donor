@@ -1,0 +1,7 @@
+{
+    "gcm_sender_id": "230803098615",
+    "firebase_url": "https://progresshive-stg.firebaseio.com/",
+    "hashId": "-KeluIAgQFW-Lf6MnUvg",
+    "cache_name":"progresshive-offline-cache-v5",
+    "dependencies":"'/css/main.min.css','/resource/image/logo.svg'"
+}

@@ -1,0 +1,251 @@
+<!--<div ng-show="authData" ng-class="{'open': toggle}" ng-cloak>-->
+<rd-loading></rd-loading>
+<div class="col-xs-12 col-sm-8 col-sm-offset-2 text-center " uib-collapse="!phd_error">
+    <div class="phd-card">
+        <p class="phd-callout callout-danger">
+            <span ng-bind-html="phd_errorMsg | sanitize"></span>
+        </p>
+    </div>
+</div>
+<div class="row" ng-show="!phd_error">
+    <div class="col-xs-12 col-sm-12 col-lg-6 col-md-offset-3 m-b-1">
+        <div class="phd-card" uib-collapse="!show">
+            <div ng-messages="msg" class="text-center">
+                <p class="phd-callout callout-danger" ng-message="err">
+                    <span ng-bind-html="err | sanitize"></span>
+                </p>
+                <p class="phd-callout callout-danger" ng-message="noSeg">
+                    <span ng-bind-html="noSeg | sanitize"></span>
+                </p>
+                <p class="phd-callout callout-danger" ng-message="noSub">
+                    <span ng-bind-html="noSub | sanitize"></span>
+                </p>
+                <p class="phd-callout callout-danger" ng-message="noCamp">
+                    <span ng-bind-html="noCamp | sanitize"></span>
+                </p>
+                <p class="phd-callout callout-success" ng-message="success">
+                    <span ng-bind-html="success | sanitize"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3 m-b-1">
+        <div class="card card-lg p-t-0">
+            <div class="card-title text-center">
+                <h4> A/B Testing </h4>
+            </div>
+            <div class="card-block">
+                <form class="form " uib-collapse="noSubscriber" name="testName">
+                    <div class="form-group">
+                        <!--<label class="sr-only" for="A/B Test">Enter A/B Test Name</label>-->
+
+                        <label class="contol-label">A/B Test Name <span class="text-danger">* </span></label>
+                        <input type="text" class="form-control" ng-model="field.testName" placeholder="Enter A/B Test Name" ng-required="true">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" uib-collapse="noSubscriber">
+    <div class="col-xs-12">
+        <div class="phd-card card-lg">
+            <div class="row">
+                <form name="testA">
+                    <div class="col-xs-12 col-md-6 widget-body">
+                        <rd-widget>
+                            <rd-widget-header icon="fa-wrench" title="Test A"></rd-widget-header>
+                            <rd-widget-body>
+                                <div class="form-group" ng-hide="true">
+                                    <label for="inputText2" class=" control-label">Select Language</label>
+                                    <div class="">
+                                        <select class="form-control bfh-languages" data-language="en_US" data-available="en_US,fr_CA,es_MX">                                                       
+                                                        <option value="en_US" selected>English (United States)</option>
+                                                        <option value="fr_CA">Français (Canada)</option>
+                                                        <option value="es_MX">Español (Mexico)</option>
+                                                    </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inputText2" class=" control-label">Select Campaign <span class="text-danger">* </span></label>
+                                    <div class="">
+                                        <!--<select ng-model="campSeleted" ng-options="item as item.title for item in camp"  class="form-control"  required>
+                                                       
+                                                    </select>-->
+                                        <!--<select class="form-control"   required>
+                                                        <option value="" disabled selected>No Campaign Selected</option>
+                                                        <option value="NetBanking">NetBanking</option>
+                                                        <option value="Welcome Gift">Welcome Gift</option>
+                                                        <option value="Platinum Credit Cards">Platinum Credit Cards</option>
+                                                        <option value="Travel Cards">Travel Cards</option>
+                                                    </select>-->
+                                        <select class="form-control" ng-model="field.campaignA" id="campaignA" ng-options="item as item.Ctitle for item in camp"
+                                            ng-change="bindCampData('testA')" ng-required="true">
+                                                       
+                                                    </select>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="titleA" class=" control-label">Title <span class="text-danger">* </span></label>
+                                    <div class="">
+                                        <input type="text" class="form-control" maxlength="48" ng-model="fieldA.title" id="titleA" placeholder="Title (48 characters max)" ng-required="true">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contentA" class=" control-label">Content <span class="text-danger">* </span></label>
+                                    <div class="">
+                                        <textarea name="textarea" rows="5" cols="50" maxlength="100" ng-model="fieldA.content" ng-required="true" id="contentA" class="form-control"
+                                            placeholder="Write down details here! (100 characters max)"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lurlA" class=" control-label">Launch URL <span class="text-danger">* </span></label>
+                                    <div class="">
+                                        <input type="url" class="form-control" ng-model="fieldA.lurl" id="lurlA" placeholder="Enter url with http:// or https://" ng-required="true">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="icon_urlA" class=" control-label">Icon URL</label>
+                                    <div class="">
+                                        <input type="url" class="form-control" ng-model="fieldA.icon_url" id="icon_urlA" placeholder="Enter url with (.jpg or .png)" pattern="^https?://(?:[a-z0-9\-]+\.)+[a-z]{2,6}(?:/[^/#?]+)+\.(?:jpg|png)$">
+                                    </div>
+                                </div>
+
+                            </rd-widget-body>
+                        </rd-widget>
+                    </div>
+                </form>
+                <form name="testB" <div class="col-xs-12 col-md-6 widget-body">
+                    <rd-widget>
+                        <rd-widget-header icon="fa-wrench" title="Test B"></rd-widget-header>
+                        <rd-widget-body>
+
+
+                            <div class="form-group" ng-hide="true">
+                                <label for="inputText2" class=" control-label">Select Language</label>
+                                <div class="">
+                                    <select class="form-control bfh-languages" data-language="en_US" data-available="en_US,fr_CA,es_MX">                                                       
+                                                        <option value="en_US" selected>English (United States)</option>
+                                                        <option value="fr_CA">Français (Canada)</option>
+                                                        <option value="es_MX">Español (Mexico)</option>
+                                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="campaignB" class=" control-label">Select Campaign <span class="text-danger">* </span></label>
+                                <div class="">
+                                    <select class="form-control" ng-model="field.campaignB" id="campaignB" ng-options="item as item.Ctitle disable when item.alreadySelected for item in camp"
+                                        ng-change="bindCampData('testB')" ng-required="true">
+                                                       
+                                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="titleB" class=" control-label">Title <span class="text-danger">* </span></label>
+                                <div class="">
+                                    <input type="text" class="form-control" maxlength="48" ng-model="fieldB.title" id="titleB" placeholder="Title (48 characters max)" ng-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contentB" class=" control-label">Content <span class="text-danger">* </span></label>
+                                <div class="">
+                                    <textarea name="textarea" rows="5" cols="50" maxlength="100" ng-model="fieldB.content" ng-required="true" id="contentB" class="form-control"
+                                        placeholder="Write down details here! (100 characters max)"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="lurlB" class=" control-label">Launch URL <span class="text-danger">* </span></label>
+                                <div class="">
+                                    <input type="url" class="form-control" ng-model="fieldB.lurl" id="lurlB" placeholder="Enter url with http:// or https://" ng-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="icon_urlB" class=" control-label">Icon URL</label>
+                                <div class="">
+                                    <input type="url" class="form-control" ng-model="fieldB.icon_url" id="icon_urlB" placeholder="Enter url with (.jpg or .png)" pattern="^https?://(?:[a-z0-9\-]+\.)+[a-z]{2,6}(?:/[^/#?]+)+\.(?:jpg|png)$">
+                                </div>
+                            </div>
+
+                        </rd-widget-body>
+                    </rd-widget>
+            </div>
+            </form>
+
+            <div class="row">
+                <div class="form-group p-t-3 p-l-2">
+                    <label for="inputPassword3" class="control-label col-xs-12">Segment <span class="text-danger">* </span></label>
+                    <div class="checkbox p-a-0 col-xs-3">
+                        <label>
+                                <input type="checkbox" ng-model="allUsers" >All Users
+                                </label>
+                    </div>
+                    <div ng-model="field.group" ng-hide="allUsers" disable-property="disabled" is-disabled="allUsers" ng-required="!allUsers"
+                        isteven-multi-select input-model="modernBrowsers" output-model="outputBrowsers" button-label="icon name"
+                        item-label="icon name maker" tick-property="ticked" selection-mode="single">
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="phd-btn-container" style="padding-right:15px;">
+                    <button class="btn btn-default" type="button" ng-click="sendAB()" ng-disabled="testA.$invalid||testB.$invalid||testName.$invalid||sendDisable"><i class="fa fa-paper-plane" aria-hidden="true" ></i> Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+
+
+
+<!--<form class="form-horizontal col-xs-12">
+                                <div class="form-group">
+                                <div class="col-sm-4">
+                                <label>Schedule Notifications For A Later Time?</label>
+                                </div>
+                                <div class="col-sm-8 p-a-0">
+                                <div class="col-xs-12 col-sm-4">
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                                No. Send them now.
+                                </div>
+                                <div class="col-xs-12 col-sm-6">
+                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                                Yes. Send them at a later time of day.
+                                </div>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                <label class="col-xs-12 col-sm-2">Wait Until</label>
+                                <div class="col-xs-12 col-sm-10">
+                                    <input type="text" class="form-control" placeholder="Now">
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-xs-12 col-sm-2">Examples :</label>
+                                    <div class="col-xs-12 col-sm-10">
+                                        <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                                            <a href="">+2 Hours</a>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                                            <a href="">+2 Days</a>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                                            <a href="">7:30 PM</a>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                                            <a href="">12/31/2016 11:45 PM</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>-->

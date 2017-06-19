@@ -1,0 +1,54 @@
+<!--<div ng-show="authData" id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>-->
+<rd-loading></rd-loading>
+
+<div class="col-xs-12 col-sm-8 col-sm-offset-2 text-center " ng-show="phd_error">
+    <div class="phd-card">
+        <p class="phd-callout callout-danger">
+            <span ng-bind-html="phd_errorMsg | sanitize"></span>
+        </p>
+    </div>
+</div>
+<div class="row" ng-show="!phd_error">
+    <div class="col-xs-12 col-md-10 col-md-offset-1 ">
+        <div class="col-md-6 ">
+            <div class=" phd-card dash-board-min-height p-x-3 middle center p-t-3">
+                <label for="inputText2" class="control-label">Segment Type</label>
+                <select class="form-control capitalize" ng-model="selectedType" ng-options="x for x in segmentType" ng-change="bindChart()"></select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="phd-card dash-board-min-height phd-flex middle widget">
+                <div class="col-sm-4 col-xs-12">
+                    <div class="widget-icon pull-left">
+                        <i class="fa fa-sitemap"></i>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-8 ">
+                    <div class="title">
+                        <h5>{{totalCount}}</h5>
+                    </div>
+                    <div class="comment">
+                        <h5>Segments</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+        <div class="phd-card card card--minheight p-a-0">
+            <div class="card-header text-center p-a-1">
+                <h5>Segmented Subscribers</h5>
+            </div>
+            <div class="card-block">
+                <canvas id="pie" class="chart chart-pie" chart-data="value" chart-labels="labels" chart-options="options">
+                </canvas>
+                 <!--TODO: colors based values, need to check with API-->
+                <!--<div class="indexContainer">
+                    <p class="consumedIndex">Consumed (%)</p>
+                    <p class="remainedIndex">Remaining (%)</p>
+                </div>-->
+            </div>
+        </div>
+        
+    </div>
+</div>
