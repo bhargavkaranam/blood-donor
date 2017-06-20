@@ -12,14 +12,21 @@
     "babel-preset-react": "^6.24.1",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
+    "css-loader": "^0.28.4",
     "debug": "~2.6.3",
     "express": "~4.15.2",
     "jade": "~1.11.0",
     "morgan": "~1.8.1",
     "nodemon": "^1.11.0",
     "react": "^15.6.1",
+    "react-arcgis": "^1.2.4",
     "react-dom": "^15.6.1",
     "serve-favicon": "~2.4.2",
+    "style-loader": "^0.18.2",
     "webpack": "^2.6.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "css-loader": "^0.28.4"
   }
 }
