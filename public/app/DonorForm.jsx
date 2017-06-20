@@ -135,7 +135,8 @@ class DemoForm extends React.Component {
 			<FormGroup controlId="formControlsSelect">
 			<ControlLabel>Blood Group</ControlLabel>
 			<FormControl name="blood" componentClass="select" placeholder="select" onChange={this.handleChange} value={this.state.blood}>
-			<option value="A+">A+</option>
+			<option>Select Blood Group</option>
+            <option value="A+">A+</option>
 			<option value="A-">A-</option>
 			<option value="B+">B+</option>
 			<option value="B-">B-</option>

@@ -40,7 +40,7 @@ module.exports = function (io) {
 
 
     io.on('connection', function (socket) {
-        console.log('a user connected');
+      //  console.log('a user connected');
         emitAllRecords(socket);
         socket.on('newDonor', function (donorObj) {
 
@@ -48,7 +48,7 @@ module.exports = function (io) {
             var donor = new donor_col({
                 firstName: donorObj.firstName,
                 lastName: donorObj.lastName,
-                
+                email: donorObj.email,
                 bloodGroup: donorObj.blood,
                 url: Date.now(),
                 lat: donorObj.clickedX,
