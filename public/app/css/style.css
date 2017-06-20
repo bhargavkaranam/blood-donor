@@ -1,4 +1,6 @@
+@import 'https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css';
 @import 'https://js.arcgis.com/4.3/esri/css/main.css';
+
 html,body
 {
 	margin: 0;

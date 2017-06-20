@@ -1,7 +1,14 @@
 import React from 'react';
 import {render} from 'react-dom';
 require('./css/style.css');
-import { Map, Layers, Graphic, Symbols, Geometry } from 'react-arcgis';
+
+import { esriPromise } from 'esri-promise';
+
+import { Map, Layers, Graphic, Symbols, Geometry, Widgets } from 'react-arcgis';
+
+import {Modal, Button} from 'react-bootstrap';
+
+const Search = Widgets.Search;
 
 class App extends React.Component {
 	
@@ -11,16 +18,14 @@ class App extends React.Component {
 			longitude: '',
 			latitude: '',
 			loading: true,
-			points: [
-				{
-					latitude: 17.6,
-					longitude: 78.67
-				}
-			]
+			clickedX: '',
+			clickedY: '',
+			showModal: false
 			
 		};
 		
-		
+		this.handleClick = this.handleClick.bind(this);
+		this.close = this.close.bind(this);
 	}
 
 	componentWillMount() {
@@ -34,17 +39,42 @@ class App extends React.Component {
 			longitude: position.coords.longitude,
 			latitude: position.coords.latitude,
 			loading: false
+
 		})
 		
 
 	}
 	handleClick(e) {
-		alert(e.x);
+		
+
+		esriPromise([
+		    'esri/geometry/support/webMercatorUtils',
+		    
+		]).then(([webMercatorUtils]) => { // Modules come back as an array, so array destructuring is convenient here. 
+		    // Make a map with the Map and MapView modules from the API. 
+		    var mp = webMercatorUtils.xyToLngLat(e.mapPoint.x,e.mapPoint.y);
+		    this.setState({
+		    	clickedX: mp[0],
+		    	clickedY: mp[1],
+		    	showModal: true
+
+		    })
+		})
+		.catch((err) => {
+		    console.log(err);
+		});
+      	
+
+	
+	}
+
+	close() {
+		this.setState({showModal: false});
 	}
 	render () {
 		if(this.state.loading) return(<p>Loading</p>);
 		else {
-		console.log(this.state);
+		
 		const titanic = (
     		<Graphic>
         		<Symbols.SimpleMarkerSymbol
@@ -65,7 +95,20 @@ class App extends React.Component {
     		</Graphic>
 		);
 		return(
+			
+
 			<div className="map">
+			<Modal show={this.state.showModal} onHide={this.close}>
+          <Modal.Header closeButton>
+            <Modal.Title>Register</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.close}>Close</Button>
+          </Modal.Footer>
+        </Modal>
 			<Map onClick={this.handleClick} viewProperties={{
 				center: [this.state.longitude, this.state.latitude],
 				zoom: 6000
@@ -73,6 +116,7 @@ class App extends React.Component {
 			<Layers.GraphicsLayer>
             	{titanic}
         	</Layers.GraphicsLayer>
+        	<Search position="top-right" />
 			</Map>
 			</div>
 			)
