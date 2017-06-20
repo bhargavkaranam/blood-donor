@@ -21,9 +21,10 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-app.locals.io = require('socket.io')(server);
+var io = app.io;
+io.attach(server);
 
-require("../controller/save-donors")(app);
+
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -9,7 +9,6 @@ var Schema = mongoose.Schema;
 var donor_schema = new Schema({
   firstName: { type: String },
   lastName: { type: String },
-  age: { type: Number, min: 16 },
   bloodGroup: { type: String },
   url: { type: Date, default: Date.now },
   lat: { type: Number },

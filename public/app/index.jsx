@@ -106,7 +106,7 @@ class App extends React.Component {
             <Modal.Title>Register</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <DonorForm />
+            <DonorForm clickedX={this.state.clickedX} clickedY={this.state.clickedY}/>
           </Modal.Body>
           
         </Modal>
