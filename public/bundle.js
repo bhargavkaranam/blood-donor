@@ -12372,6 +12372,10 @@ var _reactArcgis = __webpack_require__(83);
 
 var _reactBootstrap = __webpack_require__(313);
 
+var _DonorForm = __webpack_require__(451);
+
+var _DonorForm2 = _interopRequireDefault(_DonorForm);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -12494,15 +12498,10 @@ var App = function (_React$Component) {
 								'Register'
 							)
 						),
-						_react2.default.createElement(_reactBootstrap.Modal.Body, null),
 						_react2.default.createElement(
-							_reactBootstrap.Modal.Footer,
+							_reactBootstrap.Modal.Body,
 							null,
-							_react2.default.createElement(
-								_reactBootstrap.Button,
-								{ onClick: this.close },
-								'Close'
-							)
+							_react2.default.createElement(_DonorForm2.default, null)
 						)
 					),
 					_react2.default.createElement(
@@ -13418,7 +13417,7 @@ exports.push([module.i, "@import url(https://maxcdn.bootstrapcdn.com/bootstrap/l
 exports.push([module.i, "@import url(https://js.arcgis.com/4.3/esri/css/main.css);", ""]);
 
 // module
-exports.push([module.i, "html,body\n{\n\tmargin: 0;\n\tpadding: 0;\n\theight: 100vh;\n\twidth: 100vw;\n}\n.map\n{\n\theight: 100vh;\n\twidth: 100vw;\n}", ""]);
+exports.push([module.i, "html,body\n{\n\tmargin: 0;\n\tpadding: 0;\n\theight: 100vh;\n\twidth: 100vw;\n}\n.map\n{\n\theight: 100vh;\n\twidth: 100vw;\n}\n.donorFormButton\n{\n\t\n}", ""]);
 
 // exports
 
@@ -45357,6 +45356,163 @@ function isReactComponent(component) {
   return !!(component && component.prototype && component.prototype.isReactComponent);
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 451 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(32);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(84);
+
+var _reactBootstrap = __webpack_require__(313);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+__webpack_require__(85);
+
+var DemoForm = function (_React$Component) {
+	_inherits(DemoForm, _React$Component);
+
+	function DemoForm(props) {
+		_classCallCheck(this, DemoForm);
+
+		return _possibleConstructorReturn(this, (DemoForm.__proto__ || Object.getPrototypeOf(DemoForm)).call(this, props));
+	}
+
+	_createClass(DemoForm, [{
+		key: 'render',
+		value: function render() {
+			return _react2.default.createElement(
+				'form',
+				null,
+				_react2.default.createElement(
+					_reactBootstrap.FormGroup,
+					{
+						controlId: 'formBasicText'
+
+					},
+					_react2.default.createElement(
+						_reactBootstrap.ControlLabel,
+						null,
+						'First Name'
+					),
+					_react2.default.createElement(_reactBootstrap.FormControl, {
+						type: 'text',
+
+						placeholder: 'Enter text'
+
+					})
+				),
+				_react2.default.createElement(
+					_reactBootstrap.FormGroup,
+					{
+						controlId: 'formBasicText'
+
+					},
+					_react2.default.createElement(
+						_reactBootstrap.ControlLabel,
+						null,
+						'Last Name'
+					),
+					_react2.default.createElement(_reactBootstrap.FormControl, {
+						type: 'text',
+
+						placeholder: 'Enter text'
+
+					})
+				),
+				_react2.default.createElement(
+					_reactBootstrap.FormGroup,
+					{
+						controlId: 'formBasicText'
+
+					},
+					_react2.default.createElement(
+						_reactBootstrap.ControlLabel,
+						null,
+						'Contact Number'
+					),
+					_react2.default.createElement(_reactBootstrap.FormControl, {
+						type: 'number',
+
+						placeholder: 'Enter text'
+
+					})
+				),
+				_react2.default.createElement(
+					_reactBootstrap.FormGroup,
+					{
+						controlId: 'formBasicText'
+
+					},
+					_react2.default.createElement(
+						_reactBootstrap.ControlLabel,
+						null,
+						'Email Address'
+					),
+					_react2.default.createElement(_reactBootstrap.FormControl, {
+						type: 'text',
+
+						placeholder: 'Enter text'
+
+					})
+				),
+				_react2.default.createElement(
+					_reactBootstrap.FormGroup,
+					{
+						controlId: 'formBasicText'
+
+					},
+					_react2.default.createElement(
+						_reactBootstrap.ControlLabel,
+						null,
+						'Blood Group'
+					),
+					_react2.default.createElement(_reactBootstrap.FormControl, {
+						type: 'text',
+
+						placeholder: 'Enter text'
+
+					})
+				),
+				_react2.default.createElement(
+					_reactBootstrap.FormGroup,
+					{
+						controlId: 'formBasicText'
+
+					},
+					_react2.default.createElement(
+						_reactBootstrap.Button,
+						{ className: 'donorFormButton', bsStyle: 'success', onClick: this.close },
+						'Close'
+					)
+				)
+			);
+		}
+	}]);
+
+	return DemoForm;
+}(_react2.default.Component);
+
+exports.default = DemoForm;
 
 /***/ })
 /******/ ]);

@@ -17,6 +17,7 @@
     "esri-loader": "^1.0.0",
     "express": "~4.15.2",
     "jade": "~1.11.0",
+    "mongoose": "^4.10.7",
     "morgan": "~1.8.1",
     "nodemon": "^1.11.0",
     "react": "^15.6.1",
@@ -24,6 +25,7 @@
     "react-bootstrap": "^0.31.0",
     "react-dom": "^15.6.1",
     "serve-favicon": "~2.4.2",
+"socket.io": "^2.0.3",
     "style-loader": "^0.18.2",
     "webpack": "^2.6.1"
   },

@@ -8,6 +8,9 @@ import { Map, Layers, Graphic, Symbols, Geometry, Widgets } from 'react-arcgis';
 
 import {Modal, Button} from 'react-bootstrap';
 
+import DonorForm from './DonorForm.jsx'
+
+
 const Search = Widgets.Search;
 
 class App extends React.Component {
@@ -103,11 +106,9 @@ class App extends React.Component {
             <Modal.Title>Register</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            
+            <DonorForm />
           </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.close}>Close</Button>
-          </Modal.Footer>
+          
         </Modal>
 			<Map onClick={this.handleClick} viewProperties={{
 				center: [this.state.longitude, this.state.latitude],
