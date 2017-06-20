@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/myAppDatabase');
+mongoose.connect('mongodb://root:root@ds123312.mlab.com:23312/blood_donation_app');
 
 var Schema = mongoose.Schema;
 
