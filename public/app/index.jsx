@@ -23,12 +23,19 @@ class App extends React.Component {
 			loading: true,
 			clickedX: '',
 			clickedY: '',
-			showModal: false
+			showModal: false,
+			points: []
 			
 		};
 		
 		this.handleClick = this.handleClick.bind(this);
 		this.close = this.close.bind(this);
+		
+
+		this.socket = io();
+		this.socket.on('results',function(results){
+			this.setState({points: results});
+		}.bind(this));
 	}
 
 	componentWillMount() {
@@ -71,6 +78,9 @@ class App extends React.Component {
 	
 	}
 
+	
+
+
 	close() {
 		this.setState({showModal: false});
 	}
@@ -106,17 +116,44 @@ class App extends React.Component {
             <Modal.Title>Register</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <DonorForm clickedX={this.state.clickedX} clickedY={this.state.clickedY}/>
+            <DonorForm close={this.close} socket={this.socket} clickedX={this.state.clickedX} clickedY={this.state.clickedY}/>
           </Modal.Body>
           
         </Modal>
 			<Map onClick={this.handleClick} viewProperties={{
 				center: [this.state.longitude, this.state.latitude],
-				zoom: 6000
+				zoom: 2
 			}}>
 			<Layers.GraphicsLayer>
             	{titanic}
-        	</Layers.GraphicsLayer>
+            </Layers.GraphicsLayer>
+            	{this.state.points.map((donor,key) => {
+
+            		const t = (<Graphic>
+			        			<Symbols.SimpleMarkerSymbol
+				            	symbolProperties={{
+				                	color: [226, 119, 40],
+				                	outline: {
+				                    	color: [255, 255, 255],
+				                    	width: 3
+				                	}
+				            	}}
+			        			/>
+			        			<Geometry.Point
+			            		geometryProperties={{
+			                		latitude: donor.long,
+			                		longitude: donor.lat
+			            		}}
+			        			/>
+    							</Graphic>);
+    				return(
+    				<Layers.GraphicsLayer key={key}>	
+    					{t}
+    				</Layers.GraphicsLayer>
+    				);
+
+            	})}
+        	
         	<Search position="top-right" />
 			</Map>
 			</div>

@@ -18081,6 +18081,8 @@ var DemoForm = function (_React$Component) {
 		_this.handleChange = _this.handleChange.bind(_this);
 		_this.handleSubmit = _this.handleSubmit.bind(_this);
 		_this.sendToServer = _this.sendToServer.bind(_this);
+		_this.socket = _this.props.socket;
+
 		return _this;
 	}
 
@@ -18111,11 +18113,12 @@ var DemoForm = function (_React$Component) {
 	}, {
 		key: 'sendToServer',
 		value: function sendToServer() {
-			var socket = io();
-			socket.emit('newDonor', this.state);
-			socket.on('result', function (msg) {
+
+			this.socket.emit('newDonor', this.state);
+			this.socket.on('result', function (msg) {
 
 				msg == true ? this.setState({ message: 'Details added successfully.' }) : this.setState({ message: 'Error occurred. Try again.' });
+				this.props.close();
 			}.bind(this));
 		}
 	}, {
@@ -20823,12 +20826,18 @@ var App = function (_React$Component) {
 			loading: true,
 			clickedX: '',
 			clickedY: '',
-			showModal: false
+			showModal: false,
+			points: []
 
 		};
 
 		_this.handleClick = _this.handleClick.bind(_this);
 		_this.close = _this.close.bind(_this);
+
+		_this.socket = io();
+		_this.socket.on('results', function (results) {
+			this.setState({ points: results });
+		}.bind(_this));
 		return _this;
 	}
 
@@ -20922,20 +20931,47 @@ var App = function (_React$Component) {
 						_react2.default.createElement(
 							_reactBootstrap.Modal.Body,
 							null,
-							_react2.default.createElement(_DonorForm2.default, { clickedX: this.state.clickedX, clickedY: this.state.clickedY })
+							_react2.default.createElement(_DonorForm2.default, { close: this.close, socket: this.socket, clickedX: this.state.clickedX, clickedY: this.state.clickedY })
 						)
 					),
 					_react2.default.createElement(
 						_reactArcgis.Map,
 						{ onClick: this.handleClick, viewProperties: {
 								center: [this.state.longitude, this.state.latitude],
-								zoom: 6000
+								zoom: 2
 							} },
 						_react2.default.createElement(
 							_reactArcgis.Layers.GraphicsLayer,
 							null,
 							titanic
 						),
+						this.state.points.map(function (donor, key) {
+
+							var t = _react2.default.createElement(
+								_reactArcgis.Graphic,
+								null,
+								_react2.default.createElement(_reactArcgis.Symbols.SimpleMarkerSymbol, {
+									symbolProperties: {
+										color: [226, 119, 40],
+										outline: {
+											color: [255, 255, 255],
+											width: 3
+										}
+									}
+								}),
+								_react2.default.createElement(_reactArcgis.Geometry.Point, {
+									geometryProperties: {
+										latitude: donor.long,
+										longitude: donor.lat
+									}
+								})
+							);
+							return _react2.default.createElement(
+								_reactArcgis.Layers.GraphicsLayer,
+								{ key: key },
+								t
+							);
+						}),
 						_react2.default.createElement(Search, { position: 'top-right' })
 					)
 				);

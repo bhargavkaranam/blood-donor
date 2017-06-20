@@ -20,6 +20,8 @@ class DemoForm extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.sendToServer = this.sendToServer.bind(this);
+		this.socket = this.props.socket;
+
 	}
 
 	handleChange(e) {
@@ -53,13 +55,16 @@ class DemoForm extends React.Component {
 	}
 
 	sendToServer() {
-		var socket = io();
-		socket.emit('newDonor',this.state);
-		socket.on('result',function(msg){
+		
+		this.socket.emit('newDonor',this.state);
+		this.socket.on('result',function(msg){
 			
 			(msg == true) ? this.setState({message: 'Details added successfully.'}) : this.setState({message: 'Error occurred. Try again.'});
-			
+			this.props.close();
+
 		}.bind(this));
+
+
 	}
 
 	render() {

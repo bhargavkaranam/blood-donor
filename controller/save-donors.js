@@ -31,9 +31,17 @@ module.exports = function (io) {
     // });
 
 
+    function emitAllRecords(socket) {
+        donor_col.find(function (err, results) {
+            assert.equal(null, err);
+            socket.emit('results',results);
+        });
+    }
+
+
     io.on('connection', function (socket) {
         console.log('a user connected');
-
+        emitAllRecords(socket);
         socket.on('newDonor', function (donorObj) {
 
             // call the built-in save method to save to the database
@@ -55,6 +63,7 @@ module.exports = function (io) {
             }
 
               socket.emit('result',true);
+              emitAllRecords(socket);
             });
         })
 
