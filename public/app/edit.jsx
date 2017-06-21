@@ -1,13 +1,16 @@
 import React from 'react';
 import {render} from 'react-dom';
 require('./css/style.css');
-import { Modal, Button, FormGroup,ControlLabel,FormControl } from 'react-bootstrap';
+import { Modal, Button, FormGroup,ControlLabel,FormControl, Row, Col } from 'react-bootstrap';
 import validator from 'validator';
 
-class DemoForm extends React.Component {
+
+class Edit extends React.Component {
 	constructor(props) {
 		super(props);
+		console.log(props);
 		this.state = {
+			id: '',
 			firstName: '',
 			lastName: '',
 			mobile: '',
@@ -15,15 +18,37 @@ class DemoForm extends React.Component {
 			blood: '',
 			message: '',
 			clickedX: this.props.clickedX,
-			clickedY: this.props.clickedY
+			clickedY: this.props.clickedY,
+			showForm: 'block'
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.sendToServer = this.sendToServer.bind(this);
-		this.socket = this.props.socket;
-
+		this.socket = io();
 	}
-
+	componentWillMount() {
+		$.ajax({
+			url: '/donor/get',
+			type: 'post',
+			data: 'uid=' + this.props.match.params.uid,
+			dataType: 'json',
+			success: function(data) {
+				if(data.status) {
+					this.setState({
+						id: data.results.id,
+						firstName: data.results.firstName,
+						lastName: data.results.lastName,
+						blood: data.results.bloodGroup,
+						email: data.results.email,
+						mobile: data.results.mobile
+					})
+				}
+				else {
+					this.setState({showForm: 'none'});
+				}
+			}.bind(this)
+		})
+	}
 	handleChange(e) {
 		
 		const target = e.currentTarget;
@@ -66,9 +91,13 @@ class DemoForm extends React.Component {
 
 
 	}
-
 	render() {
+		if(this.state.showForm == 'block') {
 		return(
+
+			<Row style={{'marginTop':150}}>
+
+			<Col xs={4} xsOffset={4} style={{'display': this.state.showForm}}>
 			<form>
 			<FormGroup
 			controlId="formBasicText"
@@ -155,8 +184,14 @@ class DemoForm extends React.Component {
 			<p>{this.state.message}</p>
 			</FormGroup>
 			</form>
+			</Col>
+			</Row>
 			)
+		}
+		else {
+			return(<h1>No such donor exisits</h1>);
+		}
 	}
 }
 
-export default DemoForm;
+export default Edit;

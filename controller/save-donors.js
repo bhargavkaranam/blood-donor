@@ -9,7 +9,7 @@ var assert = require('assert');
 module.exports = function (io) {
 
 
-    
+
 
     // create new donor
     // var donor = new donor_col({
@@ -33,6 +33,7 @@ module.exports = function (io) {
 
     function emitAllRecords(socket) {
         donor_col.find(function (err, results) {
+            console.log(results);
             assert.equal(null, err);
             socket.emit('results',results);
         });
@@ -45,26 +46,55 @@ module.exports = function (io) {
         socket.on('newDonor', function (donorObj) {
 
             // call the built-in save method to save to the database
-            var donor = new donor_col({
-                firstName: donorObj.firstName,
-                lastName: donorObj.lastName,
-                
-                bloodGroup: donorObj.blood,
-                url: Date.now(),
-                lat: donorObj.clickedX,
-                long: donorObj.clickedY,
-                radius: 0
-            });
-            donor.save(function(err) {
-              if (err) {
-                socket.emit('result',false);
-                throw err;
+            if(donorObj.id) {
+                donor_col.findById(donorObj.id,function(err,donor){
+                    donor.firstName = donorObj.firstName;
 
+                    donor.lastName = donorObj.lastName,
+
+                    donor.bloodGroup = donorObj.blood,
+                    donor.lat = donorObj.clickedX,
+                    donor.long = donorObj.clickedY,
+                    donor.mobile = donorObj.mobile,
+                    donor.email = donorObj.email,
+                    donor.radius = 0
+                    donor.save(function(err,todo){
+                        if (err) {
+                            socket.emit('result',{status: false});
+                            throw err;
+
+                        }
+
+                        socket.emit('result',{status: true,uid: donor.id});
+                        emitAllRecords(socket);
+                    })
+                })
             }
+            else {
 
-              socket.emit('result',true);
-              emitAllRecords(socket);
+
+                var donor = new donor_col({
+                    firstName: donorObj.firstName,
+                    lastName: donorObj.lastName,
+
+                    bloodGroup: donorObj.blood,
+                    lat: donorObj.clickedX,
+                    long: donorObj.clickedY,
+                    mobile: donorObj.mobile,
+                    email: donorObj.email,
+                    radius: 0
+                });
+                donor.save(function(err,donor) {
+                  if (err) {
+                    socket.emit('result',{status: false});
+                    throw err;
+
+                }
+
+                socket.emit('result',{status: true,uid: donor.id});
+                emitAllRecords(socket);
             });
+            }
         })
 
         socket.on('disconnect', function () {
