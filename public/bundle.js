@@ -19551,13 +19551,16 @@ var Edit = function (_React$Component) {
 			email: '',
 			blood: '',
 			message: '',
+			lat: '',
+			lon: '',
 			clickedX: _this.props.clickedX,
 			clickedY: _this.props.clickedY,
-			showForm: 'block'
+			showForm: 'none'
 		};
 		_this.handleChange = _this.handleChange.bind(_this);
 		_this.handleSubmit = _this.handleSubmit.bind(_this);
 		_this.sendToServer = _this.sendToServer.bind(_this);
+		_this.handleDelete = _this.handleDelete.bind(_this);
 		_this.socket = io();
 		return _this;
 	}
@@ -19571,17 +19574,20 @@ var Edit = function (_React$Component) {
 				data: 'uid=' + this.props.match.params.uid,
 				dataType: 'json',
 				success: function (data) {
-					if (data.status) {
+					if (data.status && data.results) {
 						this.setState({
-							id: data.results.id,
+							id: data.results._id,
 							firstName: data.results.firstName,
 							lastName: data.results.lastName,
 							blood: data.results.bloodGroup,
 							email: data.results.email,
-							mobile: data.results.mobile
+							mobile: data.results.mobile,
+							lat: data.results.lat,
+							lon: data.results.long,
+							showForm: 'block'
 						});
 					} else {
-						this.setState({ showForm: 'none' });
+						this.setState({ showForm: 'error' });
 					}
 				}.bind(this)
 			});
@@ -19614,12 +19620,34 @@ var Edit = function (_React$Component) {
 		key: 'sendToServer',
 		value: function sendToServer() {
 
-			this.socket.emit('newDonor', this.state);
-			this.socket.on('result', function (msg) {
+			$.ajax({
+				url: '/donor/update',
+				type: 'post',
+				data: this.state,
+				dataType: 'json',
+				success: function (data) {
+					data.status == true ? this.setState({ message: 'Details updated successfully. Your URL is http://localhost:3000/edit/' + data.uid }) : this.setState({ message: 'Error occurred. Try again.' });
+				}.bind(this)
 
-				msg.status == true ? this.setState({ message: 'Details added successfully. Your URL is http://localhost:3000/edit/' + msg.uid }) : this.setState({ message: 'Error occurred. Try again.' });
-				// this.props.close();
-			}.bind(this));
+			});
+		}
+	}, {
+		key: 'handleDelete',
+		value: function handleDelete() {
+
+			$.ajax({
+				url: '/donor/delete',
+				type: 'post',
+				data: 'id=' + this.state.id,
+				dataType: 'json',
+				success: function (data) {
+
+					if (data.status) window.location.href = "http://localhost:3000/";else {
+						this.setState({ message: 'Error occurred.' });
+					}
+				}.bind(this)
+
+			});
 		}
 	}, {
 		key: 'render',
@@ -19775,6 +19803,11 @@ var Edit = function (_React$Component) {
 									'Submit'
 								),
 								_react2.default.createElement(
+									_reactBootstrap.Button,
+									{ className: 'donorFormButton', bsStyle: 'danger', onClick: this.handleDelete },
+									'Delete'
+								),
+								_react2.default.createElement(
 									'p',
 									null,
 									this.state.message
@@ -19783,7 +19816,13 @@ var Edit = function (_React$Component) {
 						)
 					)
 				);
-			} else {
+			} else if (this.state.showForm == 'none') {
+				return _react2.default.createElement(
+					'h1',
+					null,
+					'Loading...'
+				);
+			} else if (this.state.showForm == 'error') {
 				return _react2.default.createElement(
 					'h1',
 					null,
@@ -19843,6 +19882,8 @@ __webpack_require__(219);
 
 var Search = _reactArcgis.Widgets.Search;
 
+var FontAwesome = __webpack_require__(553);
+
 var App = function (_React$Component) {
 	_inherits(App, _React$Component);
 
@@ -19860,9 +19901,11 @@ var App = function (_React$Component) {
 			showModal: false,
 			showDonorModal: false,
 			points: [],
-			donor: {},
+			donor: '',
 			myMap: '',
-			myView: ''
+			myView: '',
+			showEmail: 'Show',
+			showMobile: 'Show'
 
 		};
 
@@ -19872,6 +19915,9 @@ var App = function (_React$Component) {
 		_this.handleMapLoad = _this.handleMapLoad.bind(_this);
 		_this.socket = io();
 		_this.showDetails = _this.showDetails.bind(_this);
+		_this.donorModalClose = _this.donorModalClose.bind(_this);
+		_this.showEmail = _this.showEmail.bind(_this);
+		_this.showMobile = _this.showMobile.bind(_this);
 		return _this;
 	}
 
@@ -19899,45 +19945,48 @@ var App = function (_React$Component) {
 	}, {
 		key: 'handleClick',
 		value: function handleClick(e) {
-			var _this2 = this;
 
-			if (e.graphic) {
-				var screenPoint = {
-					x: e.x,
-					y: e.y
-				};
-				this.state.myMap.hitTest(screenPoint).then(function (response) {
-					// do something with the result graphic
+			console.log(e);
+
+			var screenPoint = {
+				x: e.x,
+				y: e.y
+			};
+			this.state.myView.hitTest(screenPoint).then(function (response) {
+				var _this2 = this;
+
+				// do something with the result graphic
+				if (response.results.length > 0) {
 					var graphic = response.results[0].graphic;
-					this.showDetails();
-					console.log("here");
-				});
-			} else {
-				(0, _esriPromise.esriPromise)(['esri/geometry/support/webMercatorUtils']).then(function (_ref) {
-					var _ref2 = _slicedToArray(_ref, 1),
-					    webMercatorUtils = _ref2[0];
+					console.log(graphic);
+					this.showDetails(graphic.attributes);
+				} else {
+					(0, _esriPromise.esriPromise)(['esri/geometry/support/webMercatorUtils']).then(function (_ref) {
+						var _ref2 = _slicedToArray(_ref, 1),
+						    webMercatorUtils = _ref2[0];
 
-					// Modules come back as an array, so array destructuring is convenient here. 
-					// Make a map with the Map and MapView modules from the API. 
+						// Modules come back as an array, so array destructuring is convenient here. 
+						// Make a map with the Map and MapView modules from the API. 
 
-					var mp = webMercatorUtils.xyToLngLat(e.mapPoint.x, e.mapPoint.y);
-					_this2.setState({
-						clickedX: mp[0],
-						clickedY: mp[1],
-						showModal: true
+						var mp = webMercatorUtils.xyToLngLat(e.mapPoint.x, e.mapPoint.y);
+						_this2.setState({
+							clickedX: mp[0],
+							clickedY: mp[1],
+							showModal: true
 
+						});
+					}).catch(function (err) {
+						console.log(err);
 					});
-				}).catch(function (err) {
-					console.log(err);
-				});
-			}
+				}
+			}.bind(this));
 		}
 	}, {
 		key: 'showDetails',
-		value: function showDetails(e) {
+		value: function showDetails(donor) {
+			console.log(donor);
+			this.setState({ showDonorModal: true, donor: donor });
 
-			// this.setState({showDonorModal: true});
-			console.log("Called");
 			// console.log(donor);
 		}
 	}, {
@@ -19949,9 +19998,26 @@ var App = function (_React$Component) {
 			});
 		}
 	}, {
+		key: 'donorModalClose',
+		value: function donorModalClose() {
+			this.setState({ showDonorModal: false });
+		}
+	}, {
 		key: 'close',
 		value: function close() {
 			this.setState({ showModal: false });
+		}
+	}, {
+		key: 'showEmail',
+		value: function showEmail() {
+			$(".showMore").css('color', '#212121');
+			this.setState({ showEmail: this.state.donor.email });
+		}
+	}, {
+		key: 'showMobile',
+		value: function showMobile() {
+			$(".showMore").css('color', '#212121');
+			this.setState({ showMobile: this.state.donor.mobile });
 		}
 	}, {
 		key: 'render',
@@ -19969,7 +20035,7 @@ var App = function (_React$Component) {
 						symbolProperties: {
 							color: [226, 119, 40],
 							outline: {
-								color: [255, 255, 255],
+								color: [140, 130, 130],
 								width: 3
 							}
 						}
@@ -20018,14 +20084,70 @@ var App = function (_React$Component) {
 							_reactBootstrap.Modal.Body,
 							null,
 							_react2.default.createElement(
-								'p',
+								_reactBootstrap.Row,
 								null,
-								this.state.donor.firstName
+								_react2.default.createElement(
+									_reactBootstrap.Col,
+									{ xs: 3 },
+									_react2.default.createElement(FontAwesome, { name: 'user', size: '2x' })
+								),
+								_react2.default.createElement(
+									_reactBootstrap.Col,
+									{ xs: 9 },
+									this.state.donor.firstName,
+									' \xA0',
+									this.state.lastName
+								)
 							),
 							_react2.default.createElement(
-								'p',
+								_reactBootstrap.Row,
 								null,
-								this.state.donor.email
+								_react2.default.createElement(
+									_reactBootstrap.Col,
+									{ xs: 3 },
+									_react2.default.createElement(FontAwesome, { name: 'envelope', size: '2x' })
+								),
+								_react2.default.createElement(
+									_reactBootstrap.Col,
+									{ xs: 9 },
+									_react2.default.createElement(
+										'span',
+										{ className: 'showMore', onClick: this.showEmail },
+										this.state.showEmail
+									)
+								)
+							),
+							_react2.default.createElement(
+								_reactBootstrap.Row,
+								null,
+								_react2.default.createElement(
+									_reactBootstrap.Col,
+									{ xs: 3 },
+									_react2.default.createElement(FontAwesome, { name: 'medkit', size: '2x' })
+								),
+								_react2.default.createElement(
+									_reactBootstrap.Col,
+									{ xs: 9 },
+									this.state.donor.bloodGroup
+								)
+							),
+							_react2.default.createElement(
+								_reactBootstrap.Row,
+								null,
+								_react2.default.createElement(
+									_reactBootstrap.Col,
+									{ xs: 3 },
+									_react2.default.createElement(FontAwesome, { name: 'phone', size: '2x' })
+								),
+								_react2.default.createElement(
+									_reactBootstrap.Col,
+									{ xs: 9 },
+									_react2.default.createElement(
+										'span',
+										{ className: 'showMore', onClick: this.showMobile },
+										this.state.showMobile
+									)
+								)
 							)
 						)
 					),
@@ -20044,7 +20166,7 @@ var App = function (_React$Component) {
 
 							var t = _react2.default.createElement(
 								_reactArcgis.Graphic,
-								null,
+								{ graphicProperties: { attributes: donor } },
 								_react2.default.createElement(_reactArcgis.Symbols.SimpleMarkerSymbol, {
 									symbolProperties: {
 										color: [226, 119, 40],
@@ -20161,6 +20283,10 @@ var DemoForm = function (_React$Component) {
 
 			// }
 			if (this.state.email === '' || this.state.firstName === '' || this.state.lastName === '' || this.state.mobile === '' || this.state.blood === '') this.setState({ message: 'All fields are required.' });else if (!_validator2.default.isEmail(this.state.email)) this.setState({ message: 'Email is not valid.' });else if (!_validator2.default.isAlpha(this.state.firstName) || !_validator2.default.isAlpha(this.state.lastName)) this.setState({ message: 'Name can contain only characters.' });else if (!/^(\+\d{2}|00\d{2}) (\d{3} \d{4} \d{3})$/.test(this.state.mobile)) this.setState({ message: 'Phone number is not valid.' });else {
+				$(".donorFormButton").hide();
+				setTimeout(function () {
+					$(".donorFormButton").show();
+				}, 3000);
 				this.sendToServer();
 			}
 		}
@@ -20168,12 +20294,17 @@ var DemoForm = function (_React$Component) {
 		key: 'sendToServer',
 		value: function sendToServer() {
 
-			this.socket.emit('newDonor', this.state);
-			this.socket.on('result', function (msg) {
+			$.ajax({
+				url: '/donor/save',
+				type: 'post',
+				data: this.state,
+				dataType: 'json',
+				success: function (data) {
+					data.status == true ? this.setState({ message: 'Details added successfully. Your URL is http://localhost:3000/edit/' + data.uid }) : this.setState({ message: 'Error occurred. Try again.' });
+				}.bind(this)
+			});
+			// this.socket.emit('newDonor',this.state);
 
-				msg.status == true ? this.setState({ message: 'Details added successfully. Your URL is http://localhost:3000/edit/' + msg.uid }) : this.setState({ message: 'Error occurred. Try again.' });
-				// this.props.close();
-			}.bind(this));
 		}
 	}, {
 		key: 'render',
@@ -20328,7 +20459,7 @@ var DemoForm = function (_React$Component) {
 					),
 					_react2.default.createElement(
 						'p',
-						null,
+						{ className: 'message' },
 						this.state.message
 					)
 				)
@@ -22227,7 +22358,7 @@ exports.push([module.i, "@import url(https://maxcdn.bootstrapcdn.com/bootstrap/l
 exports.push([module.i, "@import url(https://js.arcgis.com/4.3/esri/css/main.css);", ""]);
 
 // module
-exports.push([module.i, "html,body\n{\n\tmargin: 0;\n\tpadding: 0;\n\theight: 100vh;\n\twidth: 100vw;\n}\n.map\n{\n\theight: 100vh;\n\twidth: 100vw;\n}\n.donorFormButton\n{\n\t\n}", ""]);
+exports.push([module.i, "html,body\n{\n\tmargin: 0;\n\tpadding: 0;\n\theight: 100vh;\n\twidth: 100vw;\n}\n.map\n{\n\theight: 100vh;\n\twidth: 100vw;\n}\n.donorFormButton\n{\n\tmargin-right: 20px;\n}\np\n{\n\tfont-size: 19px;\n}\np .fa\n{\n\tmargin-right: 20px;\n}\n\n.row\n{\n\tmargin-bottom: 20px;\n}\n.showMore\n{\n\tcursor: pointer;\n\tcolor: blue;\n}\n.message\n{\n\tmargin-top: 15px;\n\tfont-size: 16px;\n}\n", ""]);
 
 // exports
 
@@ -51909,6 +52040,175 @@ module.exports = g;
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 553 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(7);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _screenReaderStyles = __webpack_require__(554);
+
+var _screenReaderStyles2 = _interopRequireDefault(_screenReaderStyles);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * A React component for the font-awesome icon library.
+ *
+ * @param {String} [ariaLabel] An extra accessibility label to put on the icon
+ * @param {Boolean} [border=false] Whether or not to show a border radius
+ * @param {String} [className] An extra set of CSS classes to add to the component
+ * @param {Object} [cssModule] Option to pass FontAwesome CSS as a module
+ * @param {Boolean} [fixedWidth=false] Make buttons fixed width
+ * @param {String} [flip=false] Flip the icon's orientation.
+ * @param {Boolean} [inverse=false]Inverse the icon's color
+ * @param {String} name Name of the icon to use
+ * @param {Boolean} [pulse=false] Rotate icon with 8 steps, rather than smoothly
+ * @param {Number} [rotate] The degress to rotate the icon by
+ * @param {String} [size] The icon scaling size
+ * @param {Boolean} [spin=false] Spin the icon
+ * @param {String} [stack] Stack an icon on top of another
+ * @param {String} [tag=span] The HTML tag to use as a string, eg 'i' or 'em'
+ * @module FontAwesome
+ * @type {ReactClass}
+ */
+var FontAwesome = function (_React$Component) {
+  _inherits(FontAwesome, _React$Component);
+
+  function FontAwesome() {
+    _classCallCheck(this, FontAwesome);
+
+    var _this = _possibleConstructorReturn(this, (FontAwesome.__proto__ || Object.getPrototypeOf(FontAwesome)).call(this));
+
+    _this.displayName = 'FontAwesome';
+    return _this;
+  }
+
+  _createClass(FontAwesome, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          border = _props.border,
+          cssModule = _props.cssModule,
+          className = _props.className,
+          fixedWidth = _props.fixedWidth,
+          flip = _props.flip,
+          inverse = _props.inverse,
+          name = _props.name,
+          pulse = _props.pulse,
+          rotate = _props.rotate,
+          size = _props.size,
+          spin = _props.spin,
+          stack = _props.stack,
+          _props$tag = _props.tag,
+          tag = _props$tag === undefined ? 'span' : _props$tag,
+          ariaLabel = _props.ariaLabel,
+          props = _objectWithoutProperties(_props, ['border', 'cssModule', 'className', 'fixedWidth', 'flip', 'inverse', 'name', 'pulse', 'rotate', 'size', 'spin', 'stack', 'tag', 'ariaLabel']);
+
+      var classNames = [];
+
+      if (cssModule) {
+        classNames.push(cssModule['fa']);
+        classNames.push(cssModule['fa-' + name]);
+        size && classNames.push(cssModule['fa-' + size]);
+        spin && classNames.push(cssModule['fa-spin']);
+        pulse && classNames.push(cssModule['fa-pulse']);
+        border && classNames.push(cssModule['fa-border']);
+        fixedWidth && classNames.push(cssModule['fa-fw']);
+        inverse && classNames.push(cssModule['fa-inverse']);
+        flip && classNames.push(cssModule['fa-flip-' + flip]);
+        rotate && classNames.push(cssModule['fa-rotate-' + rotate]);
+        stack && classNames.push(cssModule['fa-stack-' + stack]);
+      } else {
+        classNames.push('fa');
+        classNames.push('fa-' + name);
+        size && classNames.push('fa-' + size);
+        spin && classNames.push('fa-spin');
+        pulse && classNames.push('fa-pulse');
+        border && classNames.push('fa-border');
+        fixedWidth && classNames.push('fa-fw');
+        inverse && classNames.push('fa-inverse');
+        flip && classNames.push('fa-flip-' + flip);
+        rotate && classNames.push('fa-rotate-' + rotate);
+        stack && classNames.push('fa-stack-' + stack);
+      }
+
+      // Add any custom class names at the end.
+      className && classNames.push(className);
+      return _react2.default.createElement(tag, _extends({}, props, { 'aria-hidden': true, className: classNames.join(' ') }), ariaLabel ? _react2.default.createElement('span', { style: _screenReaderStyles2.default }, ariaLabel) : null);
+    }
+  }]);
+
+  return FontAwesome;
+}(_react2.default.Component);
+
+FontAwesome.propTypes = {
+  ariaLabel: _propTypes2.default.string,
+  border: _propTypes2.default.bool,
+  className: _propTypes2.default.string,
+  cssModule: _propTypes2.default.object,
+  fixedWidth: _propTypes2.default.bool,
+  flip: _propTypes2.default.oneOf(['horizontal', 'vertical']),
+  inverse: _propTypes2.default.bool,
+  name: _propTypes2.default.string.isRequired,
+  pulse: _propTypes2.default.bool,
+  rotate: _propTypes2.default.oneOf([90, 180, 270]),
+  size: _propTypes2.default.oneOf(['lg', '2x', '3x', '4x', '5x']),
+  spin: _propTypes2.default.bool,
+  stack: _propTypes2.default.oneOf(['1x', '2x']),
+  tag: _propTypes2.default.string
+};
+
+exports.default = FontAwesome;
+module.exports = exports['default'];
+
+/***/ }),
+/* 554 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  position: 'absolute',
+  width: '1px',
+  height: '1px',
+  padding: '0px',
+  margin: '-1px',
+  overflow: 'hidden',
+  clip: 'rect(0px, 0px, 0px, 0px)',
+  border: '0px'
+};
+module.exports = exports['default'];
 
 /***/ })
 /******/ ]);

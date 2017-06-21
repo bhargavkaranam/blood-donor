@@ -50,19 +50,26 @@ class DemoForm extends React.Component {
 		else if(!/^(\+\d{2}|00\d{2}) (\d{3} \d{4} \d{3})$/.test(this.state.mobile))
 			this.setState({message: 'Phone number is not valid.'});
 		else {
+			$(".donorFormButton").hide();
+			setTimeout(function(){ $(".donorFormButton").show(); }, 3000);
 			this.sendToServer();
 		}
 	}
 
 	sendToServer() {
 		
-		this.socket.emit('newDonor',this.state);
-		this.socket.on('result',function(msg){
-			
-			(msg.status == true) ? this.setState({message: 'Details added successfully. Your URL is http://localhost:3000/edit/' + msg.uid}) : this.setState({message: 'Error occurred. Try again.'});
-			// this.props.close();
 
-		}.bind(this));
+		$.ajax({
+			url: '/donor/save',
+			type: 'post',
+			data: this.state,
+			dataType: 'json',
+			success: function(data) {
+				(data.status == true) ? this.setState({message: 'Details added successfully. Your URL is http://localhost:3000/edit/' + data.uid}) : this.setState({message: 'Error occurred. Try again.'});
+			}.bind(this)
+		})
+		// this.socket.emit('newDonor',this.state);
+		
 
 
 	}
@@ -153,7 +160,7 @@ class DemoForm extends React.Component {
 			
 			>
 			<Button className="donorFormButton" bsStyle="success" onClick={this.handleSubmit}>Submit</Button>
-			<p>{this.state.message}</p>
+			<p className="message">{this.state.message}</p>
 			</FormGroup>
 			</form>
 			)

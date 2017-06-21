@@ -6,16 +6,13 @@ import { esriPromise } from 'esri-promise';
 
 import { Map, Layers, Graphic, Symbols, Geometry, Widgets } from 'react-arcgis';
 
-import {Modal, Button, Col, Row} from 'react-bootstrap';
+import {Modal, Button} from 'react-bootstrap';
 
 import DonorForm from './DonorForm.jsx'
 
 import {Router,Link,browserHistory} from 'react-router-dom';
 
 const Search = Widgets.Search;
-
-
-var FontAwesome = require('react-fontawesome');
 
 class App extends React.Component {
 	
@@ -30,11 +27,9 @@ class App extends React.Component {
 			showModal: false,
 			showDonorModal: false,
 			points: [],
-			donor: '',
+			donor: {},
 			myMap: '',
-			myView: '',
-			showEmail: 'Show',
-			showMobile: 'Show'
+			myView: ''
 			
 		};
 		
@@ -44,9 +39,6 @@ class App extends React.Component {
 		this.handleMapLoad = this.handleMapLoad.bind(this);
 		this.socket = io();
 		this.showDetails = this.showDetails.bind(this);
-		this.donorModalClose = this.donorModalClose.bind(this);
-		this.showEmail = this.showEmail.bind(this);
-		this.showMobile = this.showMobile.bind(this);
 	}
 
 	componentWillMount() {
@@ -71,55 +63,49 @@ class App extends React.Component {
 	}
 	handleClick(e) {
 		
-	console.log(e);
-	
+	if(e.graphic) {
 		var screenPoint = {
 			x: e.x,
 			y: e.y
 		};
-		this.state.myView.hitTest(screenPoint)
+		this.state.myMap.hitTest(screenPoint)
 		.then(function(response){
        // do something with the result graphic
-       		if(response.results.length > 0) {
-		       	var graphic = response.results[0].graphic;
-		       	console.log(graphic);
-		       	this.showDetails(graphic.attributes);
-		       	
-       		}
-       		else {
-       			esriPromise([
-				'esri/geometry/support/webMercatorUtils'
+       	var graphic = response.results[0].graphic;
+       	this.showDetails();
+       	console.log("here");
+       	
+   		})
+	}
+	else {
+		esriPromise([
+			'esri/geometry/support/webMercatorUtils'
 			
 
-				]).then(([webMercatorUtils]) => { // Modules come back as an array, so array destructuring is convenient here. 
+		]).then(([webMercatorUtils]) => { // Modules come back as an array, so array destructuring is convenient here. 
 		    // Make a map with the Map and MapView modules from the API. 
 		    
-		    	var mp = webMercatorUtils.xyToLngLat(e.mapPoint.x,e.mapPoint.y);
-		    	this.setState({
-		    		clickedX: mp[0],
-		    		clickedY: mp[1],
-		    		showModal: true
+		    var mp = webMercatorUtils.xyToLngLat(e.mapPoint.x,e.mapPoint.y);
+		    this.setState({
+		    	clickedX: mp[0],
+		    	clickedY: mp[1],
+		    	showModal: true
 
-		   		 })
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-       		}
-   		}.bind(this))
-	
-	 
-		
+		    })
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 
-	
+	}
 
 	}
 
 
-	showDetails(donor) {
-		console.log(donor);
-		this.setState({showDonorModal: true,donor: donor});
+	showDetails(e) {
 		
+		// this.setState({showDonorModal: true});
+		console.log("Called");
 		// console.log(donor);
 	}
 	
@@ -128,27 +114,11 @@ class App extends React.Component {
 			myMap: map,
 			myView: view
 		});
-		
-	}
-
-	donorModalClose() {
-		this.setState({showDonorModal: false});
 	}
 
 	close() {
 		this.setState({showModal: false});
 	}
-
-	showEmail() {
-		$(".showMore").css('color','#212121');
-		this.setState({showEmail: this.state.donor.email});
-	}
-
-	showMobile() {
-		$(".showMore").css('color','#212121');
-		this.setState({showMobile: this.state.donor.mobile});
-	}
-
 	render () {
 		if(this.state.loading) return(<p>Loading</p>);
 			else {
@@ -159,7 +129,7 @@ class App extends React.Component {
 				symbolProperties={{
 					color: [226, 119, 40],
 					outline: {
-						color: [140, 130, 130],
+						color: [255, 255, 255],
 						width: 3
 					}
 				}}
@@ -190,12 +160,8 @@ class App extends React.Component {
 				<Modal.Title>Donor</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-				<Row><Col xs={3}><FontAwesome name="user" size="2x" /></Col><Col xs={9}>{this.state.donor.firstName} &nbsp;{this.state.lastName}</Col></Row>
-				<Row><Col xs={3}><FontAwesome name="envelope" size="2x" /></Col><Col xs={9}><span className="showMore" onClick={this.showEmail}>{this.state.showEmail}</span></Col></Row>
-				<Row><Col xs={3}><FontAwesome name="medkit" size="2x" /></Col><Col xs={9}>{this.state.donor.bloodGroup}</Col></Row>
- 				<Row><Col xs={3}><FontAwesome name="phone" size="2x" /></Col><Col xs={9}><span className="showMore" onClick={this.showMobile}>{this.state.showMobile}</span></Col></Row>
-
-				
+				<p>{this.state.donor.firstName}</p>
+				<p>{this.state.donor.email}</p>
 				</Modal.Body>
 
 				</Modal>
@@ -208,7 +174,7 @@ class App extends React.Component {
 				</Layers.GraphicsLayer>
 				{this.state.points.map((donor,key) => {
 
-					const t = (<Graphic graphicProperties={{attributes: donor}}>
+					const t = (<Graphic>
 					<Symbols.SimpleMarkerSymbol
 					symbolProperties={{
 						color: [226, 119, 40],
@@ -218,7 +184,7 @@ class App extends React.Component {
 						}
 					}}
 					/>
-					<Geometry.Point 
+					<Geometry.Point
 					geometryProperties={{
 						latitude: donor.long,
 						longitude: donor.lat
@@ -226,7 +192,7 @@ class App extends React.Component {
 					/>
 					</Graphic>);
 					return(
-					<Layers.GraphicsLayer key={key} >	
+					<Layers.GraphicsLayer key={key}>	
 					{t}
 					</Layers.GraphicsLayer>
 					);

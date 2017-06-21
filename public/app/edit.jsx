@@ -17,13 +17,16 @@ class Edit extends React.Component {
 			email: '',
 			blood: '',
 			message: '',
+			lat: '',
+			lon: '',
 			clickedX: this.props.clickedX,
 			clickedY: this.props.clickedY,
-			showForm: 'block'
+			showForm: 'none'
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.sendToServer = this.sendToServer.bind(this);
+		this.handleDelete = this.handleDelete.bind(this);
 		this.socket = io();
 	}
 	componentWillMount() {
@@ -33,18 +36,21 @@ class Edit extends React.Component {
 			data: 'uid=' + this.props.match.params.uid,
 			dataType: 'json',
 			success: function(data) {
-				if(data.status) {
+				if(data.status && data.results) {
 					this.setState({
-						id: data.results.id,
+						id: data.results._id,
 						firstName: data.results.firstName,
 						lastName: data.results.lastName,
 						blood: data.results.bloodGroup,
 						email: data.results.email,
-						mobile: data.results.mobile
+						mobile: data.results.mobile,
+						lat: data.results.lat,
+						lon: data.results.long,
+						showForm: 'block'
 					})
 				}
 				else {
-					this.setState({showForm: 'none'});
+					this.setState({showForm: 'error'});
 				}
 			}.bind(this)
 		})
@@ -81,16 +87,39 @@ class Edit extends React.Component {
 
 	sendToServer() {
 		
-		this.socket.emit('newDonor',this.state);
-		this.socket.on('result',function(msg){
-			
-			(msg.status == true) ? this.setState({message: 'Details added successfully. Your URL is http://localhost:3000/edit/' + msg.uid}) : this.setState({message: 'Error occurred. Try again.'});
-			// this.props.close();
 
-		}.bind(this));
+		$.ajax({
+			url: '/donor/update',
+			type: 'post',
+			data: this.state,
+			dataType: 'json',
+			success: function(data) {
+				(data.status == true) ? this.setState({message: 'Details updated successfully. Your URL is http://localhost:3000/edit/' + data.uid}) : this.setState({message: 'Error occurred. Try again.'});
+			}.bind(this)
 
-
+		});
+		
 	}
+
+	handleDelete() {
+		
+		$.ajax({
+			url: '/donor/delete',
+			type: 'post',
+			data: 'id=' + this.state.id,
+			dataType: 'json',
+			success: function(data) {
+				
+				if(data.status)
+					window.location.href = "http://localhost:3000/";
+				else {
+					this.setState({message: 'Error occurred.'});
+				}
+			}.bind(this)
+
+		});
+	}
+
 	render() {
 		if(this.state.showForm == 'block') {
 		return(
@@ -181,6 +210,7 @@ class Edit extends React.Component {
 			
 			>
 			<Button className="donorFormButton" bsStyle="success" onClick={this.handleSubmit}>Submit</Button>
+			<Button className="donorFormButton" bsStyle="danger" onClick={this.handleDelete}>Delete</Button>
 			<p>{this.state.message}</p>
 			</FormGroup>
 			</form>
@@ -188,7 +218,10 @@ class Edit extends React.Component {
 			</Row>
 			)
 		}
-		else {
+		else if(this.state.showForm == 'none') {
+			return(<h1>Loading...</h1>);
+		}
+		else if(this.state.showForm == 'error') {
 			return(<h1>No such donor exisits</h1>);
 		}
 	}

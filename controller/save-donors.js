@@ -59,14 +59,14 @@ module.exports = function (io) {
                     donor.mobile = donorObj.mobile,
                     donor.email = donorObj.email,
                     donor.radius = 0
-                    donor.save(function(err,todo){
+                    donor.save(function(err,donor){
                         if (err) {
-                            socket.emit('result',{status: false});
+                            socket.emit('result' + donor.id ,{status: false});
                             throw err;
 
                         }
 
-                        socket.emit('result',{status: true,uid: donor.id});
+                        socket.emit('result' + donor.id,{status: true,uid: donor.id});
                         emitAllRecords(socket);
                     })
                 })
@@ -89,12 +89,12 @@ module.exports = function (io) {
                 });
                 donor.save(function(err,donor) {
                   if (err) {
-                    socket.emit('result',{status: false});
+                    socket.emit('result' + donor.id,{status: false});
                     throw err;
 
                 }
 
-                socket.emit('result',{status: true,uid: donor.id});
+                socket.emit('result' + donor.id,{status: true,uid: donor.id});
                 emitAllRecords(socket);
             });
             }

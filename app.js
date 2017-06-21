@@ -18,7 +18,8 @@ var io = socket_io();
 app.io = io;
 
 
-var donor = require('./controller/save-donors.js')(io);
+// var donor = require('./controller/save-donors.js')(io);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,7 +36,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var d = require('./routes/donor');
 
-app.use('/donor',d.getDetails)
+d.emitAllRecords(io);
+
+app.use('/donor/save',d.save(io));
+app.use('/donor/get',d.getDetails);
+app.use('/donor/update',d.update(io));
+app.use('/donor/delete',d.delete(io));
 
 app.use('*',index);
 
