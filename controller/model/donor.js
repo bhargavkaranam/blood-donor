@@ -10,9 +10,11 @@ var donor_schema = new Schema({
   firstName: { type: String },
   lastName: { type: String },
   bloodGroup: { type: String },
+  email : {type: String},
+  phone: { type: String},
   url: { type: Date, default: Date.now },
-  lat: { type: Number },
-  long: { type: Number},
+  lat: { type: Number, index : true },
+  long: { type: Number, index : true},
   radius : {type: Number, index : true}
 });
 

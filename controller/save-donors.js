@@ -50,6 +50,7 @@ module.exports = function (io) {
                 lastName: donorObj.lastName,
                 email: donorObj.email,
                 bloodGroup: donorObj.blood,
+                phone: donorObj.mobile,
                 url: Date.now(),
                 lat: donorObj.clickedX,
                 long: donorObj.clickedY,
