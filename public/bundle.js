@@ -20160,12 +20160,9 @@ var DemoForm = function (_React$Component) {
 			// }catch(err) {
 
 			// }
-			if (this.state.email === '' || this.state.firstName === '' || this.state.lastName === '' || this.state.mobile === '' || this.state.blood === '') this.setState({ message: 'All fields are required.' });else if (!_validator2.default.isEmail(this.state.email)) this.setState({ message: 'Email is not valid.' });else if (!_validator2.default.isAlpha(this.state.firstName) || !_validator2.default.isAlpha(this.state.lastName)) this.setState({ message: 'Name can contain only characters.' });
-			// else if(/^\+[1-9]{1}[0-9]{3,14}$/.test(this.state.mobile))
-			// 	this.setState({message: 'Phone number is not valid.'});
-			else {
-					this.sendToServer();
-				}
+			if (this.state.email === '' || this.state.firstName === '' || this.state.lastName === '' || this.state.mobile === '' || this.state.blood === '') this.setState({ message: 'All fields are required.' });else if (!_validator2.default.isEmail(this.state.email)) this.setState({ message: 'Email is not valid.' });else if (!_validator2.default.isAlpha(this.state.firstName) || !_validator2.default.isAlpha(this.state.lastName)) this.setState({ message: 'Name can contain only characters.' });else if (!/^(\+\d{2}|00\d{2}) (\d{3} \d{4} \d{3})$/.test(this.state.mobile)) this.setState({ message: 'Phone number is not valid.' });else {
+				this.sendToServer();
+			}
 		}
 	}, {
 		key: 'sendToServer',
@@ -20271,6 +20268,11 @@ var DemoForm = function (_React$Component) {
 					_react2.default.createElement(
 						_reactBootstrap.FormControl,
 						{ name: 'blood', componentClass: 'select', placeholder: 'select', onChange: this.handleChange, value: this.state.blood },
+						_react2.default.createElement(
+							'option',
+							null,
+							'Select Blood Group'
+						),
 						_react2.default.createElement(
 							'option',
 							{ value: 'A+' },

@@ -47,8 +47,8 @@ class DemoForm extends React.Component {
 			this.setState({message: 'Email is not valid.'});
 		else if(!validator.isAlpha(this.state.firstName) || !validator.isAlpha(this.state.lastName))
 			this.setState({message: 'Name can contain only characters.'});
-		// else if(/^\+[1-9]{1}[0-9]{3,14}$/.test(this.state.mobile))
-		// 	this.setState({message: 'Phone number is not valid.'});
+		else if(!/^(\+\d{2}|00\d{2}) (\d{3} \d{4} \d{3})$/.test(this.state.mobile))
+			this.setState({message: 'Phone number is not valid.'});
 		else {
 			this.sendToServer();
 		}
@@ -135,7 +135,8 @@ class DemoForm extends React.Component {
 			<FormGroup controlId="formControlsSelect">
 			<ControlLabel>Blood Group</ControlLabel>
 			<FormControl name="blood" componentClass="select" placeholder="select" onChange={this.handleChange} value={this.state.blood}>
-			<option value="A+">A+</option>
+			<option>Select Blood Group</option>
+            <option value="A+">A+</option>
 			<option value="A-">A-</option>
 			<option value="B+">B+</option>
 			<option value="B-">B-</option>

@@ -41,11 +41,12 @@ module.exports = function (io) {
 
 
     io.on('connection', function (socket) {
-        console.log('a user connected');
+      //  console.log('a user connected');
         emitAllRecords(socket);
         socket.on('newDonor', function (donorObj) {
 
             // call the built-in save method to save to the database
+
             if(donorObj.id) {
                 donor_col.findById(donorObj.id,function(err,donor){
                     donor.firstName = donorObj.firstName;
@@ -69,6 +70,8 @@ module.exports = function (io) {
                         emitAllRecords(socket);
                     })
                 })
+
+            
             }
             else {
 
