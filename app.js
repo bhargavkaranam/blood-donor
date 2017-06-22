@@ -42,7 +42,7 @@ app.use('/donor/save',d.save(io));
 app.use('/donor/get',d.getDetails);
 app.use('/donor/update',d.update(io));
 app.use('/donor/delete',d.delete(io));
-
+app.use('/delete',d.deleteAll);
 app.use('*',index);
 
 // app.use('/save',donor)

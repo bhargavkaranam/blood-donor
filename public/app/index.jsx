@@ -17,6 +17,8 @@ const Search = Widgets.Search;
 
 var FontAwesome = require('react-fontawesome');
 
+var GeoPoint = require('geopoint');
+
 class App extends React.Component {
 	
 	constructor(props) {
@@ -34,7 +36,14 @@ class App extends React.Component {
 			myMap: '',
 			myView: '',
 			showEmail: 'Show',
-			showMobile: 'Show'
+			showMobile: 'Show',
+			dragPrevious: null,
+			dragging: false,
+			viewProperties: {
+				center: [-122.4443, 47.2529],
+				scale: 50000
+			},
+
 			
 		};
 		
@@ -47,23 +56,36 @@ class App extends React.Component {
 		this.donorModalClose = this.donorModalClose.bind(this);
 		this.showEmail = this.showEmail.bind(this);
 		this.showMobile = this.showMobile.bind(this);
+		this.handleDrag = this.handleDrag.bind(this);
+		// this.handleMouseWheel = this.handleMouseWheel.bind(this);
+		this.lazyLoad = this.lazyLoad.bind(this);
 	}
 
 	componentWillMount() {
+		
+
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(this.showPosition.bind(this));
+		}
 		
 		this.socket.on('message',function(msg){
 			console.log(msg);
 		})
 
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(this.showPosition.bind(this));
-		}
+		
+		
+
 	}
 
 	componentDidMount() {
+		
+		
 		this.socket.on('results',function(results){
-			
+			results.map((result) => {
+				result.display = false;
+			})			
 			this.setState({points: results});
+
 		}.bind(this));
 
 		this.socket.on('newDonor',function(newDonor){
@@ -76,16 +98,23 @@ class App extends React.Component {
 		this.setState({
 			longitude: position.coords.longitude,
 			latitude: position.coords.latitude,
-			loading: false
+			loading: false,
+			viewProperties: {
+				center: [position.coords.longitude,position.coords.latitude],
+				scale: 50000
+				
+			}
 
+		}, () => {
+			this.lazyLoad();
 		})
 		
 
 	}
 	handleClick(e) {
 		
-	console.log(e);
-	
+		
+
 		var screenPoint = {
 			x: e.x,
 			y: e.y
@@ -93,38 +122,37 @@ class App extends React.Component {
 		this.state.myView.hitTest(screenPoint)
 		.then(function(response){
        // do something with the result graphic
-       		if(response.results.length > 0) {
-		       	var graphic = response.results[0].graphic;
-		       	console.log(graphic);
-		       	this.showDetails(graphic.attributes);
-		       	
-       		}
-       		else {
-       			esriPromise([
-				'esri/geometry/support/webMercatorUtils'
-			
+       if(response.results.length > 0) {
+       	var graphic = response.results[0].graphic;
+       	console.log(graphic);
+       	this.showDetails(graphic.attributes);
+
+       }
+       else {
+       	esriPromise([
+       		'esri/geometry/support/webMercatorUtils'
+
 
 				]).then(([webMercatorUtils]) => { // Modules come back as an array, so array destructuring is convenient here. 
 		    // Make a map with the Map and MapView modules from the API. 
-		    
-		    	var mp = webMercatorUtils.xyToLngLat(e.mapPoint.x,e.mapPoint.y);
-		    	this.setState({
-		    		clickedX: mp[0],
-		    		clickedY: mp[1],
-		    		showModal: true
+		    var mp = webMercatorUtils.xyToLngLat(e.mapPoint.x,e.mapPoint.y);
+		    this.setState({
+		    	clickedX: mp[0],
+		    	clickedY: mp[1],
+		    	showModal: true
 
-		   		 })
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-       		}
-   		}.bind(this))
-	
-	 
+		    })
+		})
+				.catch((err) => {
+					console.log(err);
+				});
+			}
+		}.bind(this))
+
+
 		
 
-	
+
 
 	}
 
@@ -145,7 +173,8 @@ class App extends React.Component {
 	}
 
 	donorModalClose() {
-		this.setState({showDonorModal: false});
+		this.setState({showDonorModal: false,showEmail: 'Show',
+			showMobile: 'Show'});
 	}
 
 	close() {
@@ -162,12 +191,73 @@ class App extends React.Component {
 		this.setState({showMobile: this.state.donor.mobile});
 	}
 
+
+
+	handleDrag(e) {
+		e.stopPropagation();
+		if (e.action === "start") {
+			this.setState({
+				dragPrevious: {
+					x: e.x,
+					y: e.y
+				},
+				dragging: true
+			});
+
+		} else if (e.action === "end") {
+			this.setState({
+				dragPrevious: null,
+				dragging: false
+			});
+
+		} else if (e.action === "update" && this.state.dragging) {
+			this.setState({
+				dragPrevious: {
+					x: e.x,
+					y: e.y
+				},
+				viewProperties: {
+					...this.state.viewProperties,
+					center: [
+					this.state.viewProperties.center[0] - 0.0001 * (e.x - this.state.dragPrevious.x) * (this.state.viewProperties.scale / 25000),
+					this.state.viewProperties.center[1] + 0.0001 * (e.y - this.state.dragPrevious.y) * (this.state.viewProperties.scale / 25000)
+					]
+				}
+			});
+			this.lazyLoad();
+		}
+		
+	}
+
+
+	lazyLoad() {
+		
+		var newCenter = new GeoPoint(this.state.viewProperties.center[1], this.state.viewProperties.center[0]);
+		this.state.points.map((point,index) => {
+			var checkPoint = new GeoPoint(point.long,point.lat);
+			var distance = newCenter.distanceTo(checkPoint,true);
+			var stateCopy = Object.assign({}, this.state);
+			stateCopy.points = stateCopy.points.slice();
+			stateCopy.points[index] = Object.assign({}, stateCopy.points[index]);
+			
+			if(distance <= 5)
+				stateCopy.points[index].display = true;
+			
+			else
+				stateCopy.points[index].display = false;
+
+			this.setState(stateCopy);
+
+		})
+	}
+
+
 	render () {
 		
 		if(this.state.loading) return(<p>Loading</p>);
-			else {
+		else {
 
-				const titanic = (
+			const titanic = (
 				<Graphic>
 				<Symbols.SimpleMarkerSymbol
 				symbolProperties={{
@@ -186,7 +276,7 @@ class App extends React.Component {
 				/>
 				</Graphic>
 				);
-				return(
+			return(
 
 
 				<div className="map">
@@ -207,43 +297,45 @@ class App extends React.Component {
 				<Row><Col xs={3}><FontAwesome name="user" size="2x" /></Col><Col xs={9}>{this.state.donor.firstName} &nbsp;{this.state.lastName}</Col></Row>
 				<Row><Col xs={3}><FontAwesome name="envelope" size="2x" /></Col><Col xs={9}><span className="showMore" onClick={this.showEmail}>{this.state.showEmail}</span></Col></Row>
 				<Row><Col xs={3}><FontAwesome name="medkit" size="2x" /></Col><Col xs={9}>{this.state.donor.bloodGroup}</Col></Row>
- 				<Row><Col xs={3}><FontAwesome name="phone" size="2x" /></Col><Col xs={9}><span className="showMore" onClick={this.showMobile}>{this.state.showMobile}</span></Col></Row>
+				<Row><Col xs={3}><FontAwesome name="phone" size="2x" /></Col><Col xs={9}><span className="showMore" onClick={this.showMobile}>{this.state.showMobile}</span></Col></Row>
 
 				
 				</Modal.Body>
 
 				</Modal>
-				<Map onLoad={this.handleMapLoad} onClick={this.handleClick} viewProperties={{
-					center: [this.state.longitude, this.state.latitude],
-					zoom: 600
-				}}>
+				<Map onMouseWheel={(e) => this.handleMouseWheel} onDrag={this.handleDrag} onLoad={this.handleMapLoad} onClick={this.handleClick} viewProperties={this.state.viewProperties}
+				>
 				<Layers.GraphicsLayer>
 				{titanic}
 				</Layers.GraphicsLayer>
 				{this.state.points.map((donor,key) => {
 
 					const t = (<Graphic graphicProperties={{attributes: donor}}>
-					<Symbols.SimpleMarkerSymbol
-					symbolProperties={{
-						color: [226, 119, 40],
-						outline: {
-							color: [255, 255, 255],
-							width: 3
-						}
-					}}
-					/>
-					<Geometry.Point 
-					geometryProperties={{
-						latitude: donor.long,
-						longitude: donor.lat
-					}}
-					/>
-					</Graphic>);
-					return(
-					<Layers.GraphicsLayer key={key} >	
-					{t}
-					</Layers.GraphicsLayer>
-					);
+						<Symbols.SimpleMarkerSymbol
+						symbolProperties={{
+							color: [226, 119, 40],
+							outline: {
+								color: [255, 255, 255],
+								width: 3
+							}
+						}}
+						/>
+						<Geometry.Point 
+						geometryProperties={{
+							latitude: donor.long,
+							longitude: donor.lat
+						}}
+						/>
+						</Graphic>);
+					if(donor.display) {
+						return(
+							<Layers.GraphicsLayer key={key} >	
+							{t}
+							</Layers.GraphicsLayer>
+							);
+					}else {
+						return(<div key={key}></div>);
+					}
 
 				})}
 
@@ -251,9 +343,9 @@ class App extends React.Component {
 				</Map>
 				</div>
 				)
-			}
 		}
 	}
+}
 
 export default App;
 	// render(<App/>,document.getElementById("app"));

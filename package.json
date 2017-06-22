@@ -16,6 +16,7 @@
     "debug": "~2.6.3",
     "esri-loader": "^1.0.0",
     "express": "~4.15.2",
+    "geopoint": "^1.0.1",
     "jade": "~1.11.0",
     "mongoose": "^4.10.7",
     "morgan": "~1.8.1",

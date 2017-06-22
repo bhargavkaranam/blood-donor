@@ -103,9 +103,14 @@ router.update = function(io) {
 				}
 				else {
 					
+					donor_col.find(function (err, results) {
+						console.log(results);
+						assert.equal(null, err);
+						io.sockets.emit('results',results);
+						res.json({status: true,uid: donorObj.id});
+					});
 					
-					io.sockets.emit('newDonor',donorObj);
-					res.json({status: true,uid: donorObj.id});
+					
 					
 					
 
@@ -115,6 +120,12 @@ router.update = function(io) {
 		})
 
 	}
+}
+
+router.deleteAll = function(req,res) {
+	donor_col.remove({},function(err,results){
+		res.end("Done");
+	})
 }
 
 router.emitAllRecords = function(io) {
