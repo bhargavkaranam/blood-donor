@@ -50,13 +50,26 @@ class App extends React.Component {
 	}
 
 	componentWillMount() {
+		
+		this.socket.on('message',function(msg){
+			console.log(msg);
+		})
+
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(this.showPosition.bind(this));
+		}
+	}
+
+	componentDidMount() {
 		this.socket.on('results',function(results){
 			
 			this.setState({points: results});
 		}.bind(this));
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(this.showPosition.bind(this));
-		}
+
+		this.socket.on('newDonor',function(newDonor){
+
+			this.setState({points: this.state.points.concat(newDonor)});
+		}.bind(this))
 	}
 
 	showPosition(position) {
@@ -150,6 +163,7 @@ class App extends React.Component {
 	}
 
 	render () {
+		
 		if(this.state.loading) return(<p>Loading</p>);
 			else {
 

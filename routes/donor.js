@@ -6,6 +6,13 @@ var donor_col = require('../controller/model/donor');
 
 var assert = require('assert');
 
+router.test = function(io) {
+	return function(req,res) {
+		io.sockets.emit('message',"Hello world");
+		res.end('done');
+	}
+}
+
 router.getDetails = function(req,res) {
 
 	var uid = req.body.uid;
@@ -30,8 +37,13 @@ router.delete = function(io) {
 				res.json({status: false})
 			}
 			else {
-				router.emitAllRecords(io);
-				res.json({status: true});
+				donor_col.find(function (err, results) {
+					console.log(results);
+					assert.equal(null, err);
+					io.sockets.emit('results',results);
+					res.json({status: true});
+				});
+				
 			}
 		})
 	}
@@ -51,13 +63,19 @@ router.save = function(io) {
 			email: req.body.email,
 			radius: 0
 		});
-		donor.save(function(err,donor) {
+		donor.save(function(err,donorObj) {
 			if (err) {
 				res.json({status: false});
 			}
 			else {
+				
+				
+				io.sockets.emit('newDonor',donorObj);
 				res.json({status: true,uid: donor.id});
-				router.emitAllRecords(io);
+				
+				
+
+				
 			}
 		});
 	}
@@ -77,15 +95,21 @@ router.update = function(io) {
 			donor.mobile = req.body.mobile,
 			donor.email = req.body.email,
 			donor.radius = 0
-			donor.save(function(err,donor){
+			donor.save(function(err,donorObj){
 				if (err) {
 					res.json({status: false});
 					// throw err;
 
 				}
 				else {
-					res.json({status: true,uid: donor.id});
-					router.emitAllRecords(io);
+					
+					
+					io.sockets.emit('newDonor',donorObj);
+					res.json({status: true,uid: donorObj.id});
+					
+					
+
+
 				}
 			})
 		})
@@ -102,6 +126,8 @@ router.emitAllRecords = function(io) {
 		});
 	});
 }
+
+
 
 
 module.exports = router;

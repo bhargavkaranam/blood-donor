@@ -210,6 +210,7 @@ class Edit extends React.Component {
 			
 			>
 			<Button className="donorFormButton" bsStyle="success" onClick={this.handleSubmit}>Submit</Button>
+			<Button className="donorFormButton" bsStyle="danger" onClick={this.changeLocation}>Change Location</Button>
 			<Button className="donorFormButton" bsStyle="danger" onClick={this.handleDelete}>Delete</Button>
 			<p>{this.state.message}</p>
 			</FormGroup>
