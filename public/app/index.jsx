@@ -82,15 +82,19 @@ class App extends React.Component {
 		
 		this.socket.on('results',function(results){
 			results.map((result) => {
-				result.display = false;
+				result.visible = false;
 			})			
-			this.setState({points: results});
+			this.setState({points: results}, () => {
+				this.lazyLoad();
+			});
 
 		}.bind(this));
 
 		this.socket.on('newDonor',function(newDonor){
 
-			this.setState({points: this.state.points.concat(newDonor)});
+			this.setState({points: this.state.points.concat(newDonor)}, () => {
+				this.lazyLoad();
+			});
 		}.bind(this))
 	}
 
@@ -241,10 +245,10 @@ class App extends React.Component {
 			stateCopy.points[index] = Object.assign({}, stateCopy.points[index]);
 			
 			if(distance <= 5)
-				stateCopy.points[index].display = true;
+				stateCopy.points[index].visible = true;
 			
 			else
-				stateCopy.points[index].display = false;
+				stateCopy.points[index].visible = false;
 
 			this.setState(stateCopy);
 
@@ -327,15 +331,18 @@ class App extends React.Component {
 						}}
 						/>
 						</Graphic>);
-					if(donor.display) {
+						if(donor.visible) {
 						return(
 							<Layers.GraphicsLayer key={key} >	
 							{t}
 							</Layers.GraphicsLayer>
 							);
-					}else {
-						return(<div key={key}></div>);
-					}
+					
+					 	}
+					 	else {
+					 		return(<div key={key}></div>);
+					 	}
+					
 
 				})}
 
