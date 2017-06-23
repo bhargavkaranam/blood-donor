@@ -117,7 +117,7 @@ class DemoForm extends React.Component {
 			type="text"
 			value={this.state.mobile}
 			onChange={this.handleChange}
-			placeholder="Enter text"
+			placeholder="Enter mobile (00XX XXX XXXX XXX or +XX XXX XXXX XXX)"
 			
 			/>
 			

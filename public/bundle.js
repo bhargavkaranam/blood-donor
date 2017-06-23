@@ -20819,7 +20819,7 @@ var DemoForm = function (_React$Component) {
 						type: 'text',
 						value: this.state.mobile,
 						onChange: this.handleChange,
-						placeholder: 'Enter text'
+						placeholder: 'Enter mobile (00XX XXX XXXX XXX or +XX XXX XXXX XXX)'
 
 					})
 				),
@@ -22812,7 +22812,7 @@ exports.push([module.i, "@import url(https://maxcdn.bootstrapcdn.com/bootstrap/l
 exports.push([module.i, "@import url(https://js.arcgis.com/4.3/esri/css/main.css);", ""]);
 
 // module
-exports.push([module.i, "html,body\n{\n\tmargin: 0;\n\tpadding: 0;\n\theight: 100vh;\n\twidth: 100vw;\n}\n.map\n{\n\theight: 100vh;\n\twidth: 100vw;\n}\n.donorFormButton\n{\n\tmargin-right: 20px;\n}\np\n{\n\tfont-size: 19px;\n}\np .fa\n{\n\tmargin-right: 20px;\n}\n\n.row\n{\n\tmargin-bottom: 20px;\n}\n.showMore\n{\n\tcursor: pointer;\n\tcolor: blue;\n}\n.message\n{\n\tmargin-top: 15px;\n\tfont-size: 16px;\n}\n", ""]);
+exports.push([module.i, "html,body\n{\n\tmargin: 0;\n\tpadding: 0;\n\theight: 100vh;\n\twidth: 100vw;\n}\n.map\n{\n\theight: 100vh;\n\twidth: 100vw;\n\tcursor: pointer;\n}\n.donorFormButton\n{\n\tmargin-right: 20px;\n}\np\n{\n\tfont-size: 19px;\n}\np .fa\n{\n\tmargin-right: 20px;\n}\n\n.row\n{\n\tmargin-bottom: 20px;\n}\n.showMore\n{\n\tcursor: pointer;\n\tcolor: blue;\n}\n.message\n{\n\tmargin-top: 15px;\n\tfont-size: 16px;\n}\n", ""]);
 
 // exports
 
