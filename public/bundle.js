@@ -19844,6 +19844,10 @@ var _validator = __webpack_require__(220);
 
 var _validator2 = _interopRequireDefault(_validator);
 
+var _index = __webpack_require__(233);
+
+var _index2 = _interopRequireDefault(_index);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -19883,6 +19887,7 @@ var Edit = function (_React$Component) {
 		_this.handleSubmit = _this.handleSubmit.bind(_this);
 		_this.sendToServer = _this.sendToServer.bind(_this);
 		_this.handleDelete = _this.handleDelete.bind(_this);
+		_this.changeLocation = _this.changeLocation.bind(_this);
 		_this.socket = io();
 		return _this;
 	}
@@ -19890,29 +19895,34 @@ var Edit = function (_React$Component) {
 	_createClass(Edit, [{
 		key: 'componentWillMount',
 		value: function componentWillMount() {
-			$.ajax({
-				url: '/donor/get',
-				type: 'post',
-				data: 'uid=' + this.props.match.params.uid,
-				dataType: 'json',
-				success: function (data) {
-					if (data.status && data.results) {
-						this.setState({
-							id: data.results._id,
-							firstName: data.results.firstName,
-							lastName: data.results.lastName,
-							blood: data.results.bloodGroup,
-							email: data.results.email,
-							mobile: data.results.mobile,
-							lat: data.results.lat,
-							lon: data.results.long,
-							showForm: 'block'
-						});
-					} else {
-						this.setState({ showForm: 'error' });
-					}
-				}.bind(this)
-			});
+			if (this.props.state) {
+				this.setState(this.props.state);
+				this.setState({ clickedX: this.props.x, clickedY: this.props.y, showForm: 'block' });
+			} else {
+				$.ajax({
+					url: '/donor/get',
+					type: 'post',
+					data: 'uid=' + this.props.match.params.uid,
+					dataType: 'json',
+					success: function (data) {
+						if (data.status && data.results) {
+							this.setState({
+								id: data.results._id,
+								firstName: data.results.firstName,
+								lastName: data.results.lastName,
+								blood: data.results.bloodGroup,
+								email: data.results.email,
+								mobile: data.results.mobile,
+								lat: data.results.lat,
+								lon: data.results.long,
+								showForm: 'block'
+							});
+						} else {
+							this.setState({ showForm: 'error' });
+						}
+					}.bind(this)
+				});
+			}
 		}
 	}, {
 		key: 'handleChange',
@@ -19970,6 +19980,11 @@ var Edit = function (_React$Component) {
 				}.bind(this)
 
 			});
+		}
+	}, {
+		key: 'changeLocation',
+		value: function changeLocation() {
+			this.setState({ showForm: 'map' });
 		}
 	}, {
 		key: 'render',
@@ -20155,6 +20170,8 @@ var Edit = function (_React$Component) {
 					null,
 					'No such donor exisits'
 				);
+			} else {
+				return _react2.default.createElement(_index2.default, { existingState: this.state });
 			}
 		}
 	}]);
@@ -20199,6 +20216,10 @@ var _DonorForm2 = _interopRequireDefault(_DonorForm);
 
 var _reactRouterDom = __webpack_require__(139);
 
+var _edit = __webpack_require__(232);
+
+var _edit2 = _interopRequireDefault(_edit);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20242,7 +20263,8 @@ var App = function (_React$Component) {
 			viewProperties: {
 				center: [-122.4443, 47.2529],
 				scale: 50000
-			}
+			},
+			editForm: false
 
 		};
 
@@ -20339,12 +20361,18 @@ var App = function (_React$Component) {
 						// Modules come back as an array, so array destructuring is convenient here. 
 						// Make a map with the Map and MapView modules from the API. 
 						var mp = webMercatorUtils.xyToLngLat(e.mapPoint.x, e.mapPoint.y);
-						_this5.setState({
-							clickedX: mp[0],
-							clickedY: mp[1],
-							showModal: true
+						if (_this5.props.existingState) {
+							_this5.setState({ editForm: true, clickedX: mp[0],
+								clickedY: mp[1],
+								showModal: false });
+						} else {
+							_this5.setState({
+								clickedX: mp[0],
+								clickedY: mp[1],
+								showModal: true
 
-						});
+							});
+						}
 					}).catch(function (err) {
 						console.log(err);
 					});
@@ -20443,6 +20471,7 @@ var App = function (_React$Component) {
 		value: function render() {
 			var _this7 = this;
 
+			if (this.state.editForm) return _react2.default.createElement(_edit2.default, { state: this.props.existingState, x: this.state.clickedX, y: this.state.clickedY });
 			if (this.state.loading) return _react2.default.createElement(
 				'p',
 				null,

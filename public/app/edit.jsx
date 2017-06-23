@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 require('./css/style.css');
 import { Modal, Button, FormGroup,ControlLabel,FormControl, Row, Col } from 'react-bootstrap';
 import validator from 'validator';
-
+import App from './index.jsx';
 
 class Edit extends React.Component {
 	constructor(props) {
@@ -27,9 +27,15 @@ class Edit extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.sendToServer = this.sendToServer.bind(this);
 		this.handleDelete = this.handleDelete.bind(this);
+		this.changeLocation = this.changeLocation.bind(this);
 		this.socket = io();
 	}
 	componentWillMount() {
+		if(this.props.state) {
+			this.setState(this.props.state);
+			this.setState({clickedX: this.props.x,clickedY: this.props.y,showForm: 'block'});
+		}
+		else {
 		$.ajax({
 			url: '/donor/get',
 			type: 'post',
@@ -54,6 +60,7 @@ class Edit extends React.Component {
 				}
 			}.bind(this)
 		})
+	}
 	}
 	handleChange(e) {
 		
@@ -118,6 +125,10 @@ class Edit extends React.Component {
 			}.bind(this)
 
 		});
+	}
+
+	changeLocation() {
+		this.setState({showForm: 'map'});
 	}
 
 	render() {
@@ -224,6 +235,9 @@ class Edit extends React.Component {
 		}
 		else if(this.state.showForm == 'error') {
 			return(<h1>No such donor exisits</h1>);
+		}
+		else {
+			return(<App existingState={this.state}/>);
 		}
 	}
 }

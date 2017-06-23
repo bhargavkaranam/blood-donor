@@ -14,6 +14,7 @@ import {Router,Link,browserHistory} from 'react-router-dom';
 
 const Search = Widgets.Search;
 
+import Edit from './edit.jsx';
 
 var FontAwesome = require('react-fontawesome');
 
@@ -43,6 +44,7 @@ class App extends React.Component {
 				center: [-122.4443, 47.2529],
 				scale: 50000
 			},
+			editForm: false
 
 			
 		};
@@ -117,7 +119,7 @@ class App extends React.Component {
 	}
 	handleClick(e) {
 		
-		
+	
 
 		var screenPoint = {
 			x: e.x,
@@ -140,12 +142,19 @@ class App extends React.Component {
 				]).then(([webMercatorUtils]) => { // Modules come back as an array, so array destructuring is convenient here. 
 		    // Make a map with the Map and MapView modules from the API. 
 		    var mp = webMercatorUtils.xyToLngLat(e.mapPoint.x,e.mapPoint.y);
+		    if(this.props.existingState) {
+		    	this.setState({editForm: true,clickedX: mp[0],
+		    	clickedY: mp[1],
+		    	showModal: false});
+		    }
+		    else {
 		    this.setState({
 		    	clickedX: mp[0],
 		    	clickedY: mp[1],
 		    	showModal: true
 
 		    })
+		}
 		})
 				.catch((err) => {
 					console.log(err);
@@ -257,7 +266,7 @@ class App extends React.Component {
 
 
 	render () {
-		
+		if(this.state.editForm) return(<Edit state={this.props.existingState} x={this.state.clickedX} y={this.state.clickedY}/>)
 		if(this.state.loading) return(<p>Loading</p>);
 		else {
 
