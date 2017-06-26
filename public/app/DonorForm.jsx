@@ -51,7 +51,7 @@ class DemoForm extends React.Component {
 			this.setState({message: 'Phone number is not valid.'});
 		else {
 			$(".donorFormButton").hide();
-			setTimeout(function(){ $(".donorFormButton").show(); }, 3000);
+			setTimeout(function(){ $(".donorFormButton").show(); }, 8080);
 			this.sendToServer();
 		}
 	}
@@ -65,7 +65,7 @@ class DemoForm extends React.Component {
 			data: this.state,
 			dataType: 'json',
 			success: function(data) {
-				(data.status == true) ? this.setState({message: 'Details added successfully. Your URL is http://localhost:3000/edit/' + data.uid}) : this.setState({message: 'Error occurred. Try again.'});
+				(data.status == true) ? this.setState({message: 'Details added successfully. Your URL is https://patient-donor.appspot.com/edit/' + data.uid}) : this.setState({message: 'Error occurred. Try again.'});
 			}.bind(this)
 		})
 		// this.socket.emit('newDonor',this.state);

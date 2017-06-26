@@ -1,9 +1,10 @@
 {
   "name": "blood-donor",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "test": "mocha tests"
   },
   "dependencies": {
     "babel-core": "^6.25.0",
@@ -40,6 +41,9 @@
   },
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "css-loader": "^0.28.4"
+    "chai": "^4.0.2",
+    "css-loader": "^0.28.4",
+    "mocha": "^3.4.2",
+     "sinon": "^1.17.2"
   }
 }
