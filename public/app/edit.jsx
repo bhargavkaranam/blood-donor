@@ -101,7 +101,7 @@ class Edit extends React.Component {
 			data: this.state,
 			dataType: 'json',
 			success: function(data) {
-				(data.status == true) ? this.setState({message: 'Details updated successfully. Your URL is http://localhost:3000/edit/' + data.uid}) : this.setState({message: 'Error occurred. Try again.'});
+				(data.status == true) ? this.setState({message: 'Details updated successfully. Your URL is https://patient-donor.appspot.com/edit/' + data.uid}) : this.setState({message: 'Error occurred. Try again.'});
 			}.bind(this)
 
 		});
@@ -118,7 +118,7 @@ class Edit extends React.Component {
 			success: function(data) {
 				
 				if(data.status)
-					window.location.href = "http://localhost:3000/";
+					window.location.href = "https://patient-donor.appspot.com/";
 				else {
 					this.setState({message: 'Error occurred.'});
 				}

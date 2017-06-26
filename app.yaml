@@ -1,0 +1,22 @@
+
+# [START runtime]
+runtime: nodejs
+env: flex
+# [END runtime]
+
+# Temporary setting to keep gcloud from uploading node_modules
+skip_files:
+ - ^node_modules$
+ 
+handlers:
+- url: /.*
+  script: IGNORED
+
+env_variables:
+  NODE_ENV: 'production'
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 10
+  cool_down_period_sec: 120 # default value
+  cpu_utilization:
+    target_utilization: 0.75  
