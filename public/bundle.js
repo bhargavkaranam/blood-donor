@@ -19958,7 +19958,7 @@ var Edit = function (_React$Component) {
 				data: this.state,
 				dataType: 'json',
 				success: function (data) {
-					data.status == true ? this.setState({ message: 'Details updated successfully. Your URL is http://localhost:3000/edit/' + data.uid }) : this.setState({ message: 'Error occurred. Try again.' });
+					data.status == true ? this.setState({ message: 'Details updated successfully. Your URL is https://patient-donor.appspot.com/edit/' + data.uid }) : this.setState({ message: 'Error occurred. Try again.' });
 				}.bind(this)
 
 			});
@@ -19974,7 +19974,7 @@ var Edit = function (_React$Component) {
 				dataType: 'json',
 				success: function (data) {
 
-					if (data.status) window.location.href = "http://localhost:3000/";else {
+					if (data.status) window.location.href = "https://patient-donor.appspot.com/";else {
 						this.setState({ message: 'Error occurred.' });
 					}
 				}.bind(this)
@@ -20740,7 +20740,7 @@ var DemoForm = function (_React$Component) {
 				$(".donorFormButton").hide();
 				setTimeout(function () {
 					$(".donorFormButton").show();
-				}, 3000);
+				}, 8080);
 				this.sendToServer();
 			}
 		}
@@ -20754,7 +20754,7 @@ var DemoForm = function (_React$Component) {
 				data: this.state,
 				dataType: 'json',
 				success: function (data) {
-					data.status == true ? this.setState({ message: 'Details added successfully. Your URL is http://localhost:3000/edit/' + data.uid }) : this.setState({ message: 'Error occurred. Try again.' });
+					data.status == true ? this.setState({ message: 'Details added successfully. Your URL is https://patient-donor.appspot.com/edit/' + data.uid }) : this.setState({ message: 'Error occurred. Try again.' });
 				}.bind(this)
 			});
 			// this.socket.emit('newDonor',this.state);

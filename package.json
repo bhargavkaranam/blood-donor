@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "mocha tests"
+    "test": "mocha ./test/test.js --timeout 15000"
   },
   "dependencies": {
     "babel-core": "^6.25.0",
